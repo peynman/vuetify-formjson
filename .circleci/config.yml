@@ -11,7 +11,7 @@ jobs:
         - node-deps-v1-{{ .Branch }}
         - node-deps-v1
     - run:
-        command: ls -lah /tmp && npm install
+        command: npm install
     - run:
         command: npm run build
     - save_cache:

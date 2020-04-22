@@ -1,15 +1,32 @@
 
 # Vuetify FormJSON
-[![CircleCI](https://circleci.com/gh/peynman/vuetify-formjson.svg?style=svg)](https://circleci.com/gh/peynman/vuetify-formjson)
-[![Latest Stable Version](https://img.shields.io/packagist/v/peynman/vuetify-formjson.svg?style=flat-square)](https://packagist.org/packages/peynman/vuetify-formjson)
-[![Total Downloads](https://img.shields.io/packagist/dt/peynman/vuetify-formjson.svg?style=flat-square)](https://packagist.org/packages/peynman/vuetify-formjson)
-[![License](https://img.shields.io/packagist/l/peynman/vuetify-formjson.svg?style=flat-square)](https://packagist.org/packages/peynman/vuetify-formjson)
-[![StyleCI](https://styleci.io/repos/225846364/shield)](https://styleci.io/repos/225846364)
 
-### Create powerful forms with Vuetify just by defining the inputs in a json properties
+[![CircleCI](https://circleci.com/gh/peynman/vuetify-formjson.svg?style=svg)](https://circleci.com/gh/peynman/vuetify-formjson)
+[![NPM version](https://img.shields.io/npm/v/@peynman/vuetify-formjson.svg?style=flat)](https://npmjs.org/package/@peynman/vuetify-formjson)
+[![NPM downloads](https://img.shields.io/npm/dm/@peynman/vuetify-formjson.svg?style=flat)](https://npmjs.org/package/@peynman/vuetify-formjson)
+[![License](https://img.shields.io/github/license/peynman/vuetify-formjson.svg?style=flat)](https://github.com/peynman/vuetify-formjson/blob/master/LICENSE)
+
+# Demos:
+* [Example: Showcase](http://github.com)
+* [Example: Most Basic](http://github.com)
+* [Example: Datatable remote](http://github.com)
+* [Example: Components List](http://github.com)
+
+## Features
+* Create forms from a json schema
+* Grab the output as an object in your parent component (v-model)
+* Nesting forms
+* Lots of components and inputs
+
+## Dependencies
+* ``Vue``
+* ``Vuetify``
+* ``jsoneditor`` if you use the 'json input'
+* ``axios`` if you use the 'datatable input'
+* ``vuetify-image-input`` if you use the 'image upload input'
 
 ## Installation
-* ``npm i vuetify-formjson``
+* ``npm i @peynman/vuetify-formjson``
 
 ## Usage
 Template:
@@ -57,3 +74,22 @@ export default {
     })
 }
 ````
+
+# Developers
+## Project setup
+```
+npm install
+```
+### Compiles and hot-reloads for development
+```
+npm run dev
+```
+### Compiles and minifies for production
+```
+npm run build:prod
+```
+### Lints and fixes files
+```
+npm run build
+```
+
