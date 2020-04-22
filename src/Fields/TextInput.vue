@@ -18,7 +18,7 @@ export default {
         value: Object,
         updateKeyCodes: {
             type: Array,
-            default: () => ([13, 9])
+            default: () => ([])
         }
     },
     computed: {

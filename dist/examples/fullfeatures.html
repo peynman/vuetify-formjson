@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="An example for Vuetify FormJSON">
+	<meta name="author" content="peynman.net@gmail.com">
+	<title>ProseMirror Vue EditorView - Examples: Showcase</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/jsoneditor@8.6.4/dist/jsoneditor.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/../vuetify-formjson.min.css">
+	<style>
+	.showcase-column {
+		border-right: 4px solid lightgray;
+	}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<v-app>
+			<v-content>
+				<v-container
+					class="fill-height"
+					fluid
+				>
+					<v-row
+						align="start"
+						justify="center"
+					>
+						<v-col
+						class="showcase-column"
+							cols="12"
+							md="6"
+						>
+							<vuetify-formjson :options="exampleOptions" :fields="exmapleFields.fields" v-model="jsonData.output"></vuetify-formjson>
+						</v-col>
+						<v-col
+							cols="12"
+							md="6"
+							>
+							<v-tabs v-model="tab">
+								<v-tab href="#schema">
+									<span>Schema</span>
+								</v-tab>
+								<v-tab href="#output">
+									<span>Output</span>
+								</v-tab>
+								<v-tab-item value="schema">
+										<vuetify-formjson :fields="schemaFields" v-model="exmapleFields"></vuetify-formjson>
+									</v-tab-item>
+									<v-tab-item value="output">
+										<vuetify-formjson :fields="outputFields" v-model="jsonData"></vuetify-formjson>
+									</v-tab-item>
+							</v-tabs>
+						</v-col>
+				</v-row>
+				</v-container>
+			</v-content>
+		</v-app>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsoneditor@8.6.4/dist/jsoneditor.min.js"></script>
+	<script src="https://unpkg.com/@seregpie/claw@3.0.0"></script>
+	<script src="https://unpkg.com/vueclaw@1.1.0"></script>
+	<script src="https://unpkg.com/vuetify-image-input"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js"></script>
+	<script src="/../vuetify-formjson.min.js"></script>
+	<script src="profiles-json.js"></script>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			vuetify: new Vuetify(),
+			data: () => ({
+				tab: 'output',
+				formData: {},
+				jsonData: {
+					output: {}
+				},
+				schemaFields: {
+					fields: {
+						type: 'input',
+						input: 'json',
+						label: 'FormJSON Schema',
+						height: '600px',
+					}
+				},
+				outputFields: {
+					output: {
+						type: 'input',
+						input: 'json',
+						label: 'FormJSON model',
+						height: '600px',
+					}
+				},
+				exampleOptions: {
+					class: 'super-dense',
+					props: {
+						filled: true,
+						dense: true,
+					}
+				},
+				exmapleFields: {fields:ProfilesJSON},
+			}),
+		})
+	</script>
+</body>
+</html>

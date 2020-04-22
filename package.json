@@ -1,16 +1,18 @@
 {
     "name": "@peynman/vuetify-formjson",
     "description": "Generate Forms using JSON Schema. Based on Vuetify components.",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "license": "GPL-3.0-or-later",
     "author": {
         "name": "Peynman",
-        "email": "peynman.net@gmail.com"
+        "email": "peynman.net@gmail.com",
+        "url": "https://peynman.github.io/vuetify-formjson/"
     },
     "repository": "github:peynman/vuetify-formjson",
     "main": "dist/vuetify-formjson.umd.js",
     "module": "dist/vuetify-formjson.esm.js",
     "unpkg": "dist/vuetify-formjson.min.js",
+    "keywords": ["vue", "vuetify", "form", "json", "schema", "input", "datatable"],
     "browser": {
         "./components": "src/components.js"
     },
@@ -21,7 +23,8 @@
         "watch:prod": "./node_modules/rollup/dist/bin/rollup --config rollup.config.js --config-iife --config-production -w",
         "dev": "./node_modules/npm-run-all/bin/npm-run-all/index.js --parallel start watch",
         "prod": "./node_modules/npm-run-all/bin/npm-run-all/index.js --parallel start watch:prod",
-        "start": "./node_modules/serve/bin/serve.js dist"
+        "start": "./node_modules/serve/bin/serve.js dist",
+        "test": "echo \"No test specified\""
     },
     "devDependencies": {
         "@babel/core": "^7.7.7",

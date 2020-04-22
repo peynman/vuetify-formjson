@@ -15,11 +15,7 @@ export default {
     props: {
         id: String,
         field: Object,
-        value: Object,
-        updateKeyCodes: {
-            type: Array,
-            default: () => ([13, 9])
-        }
+        value: Object
     },
     computed: {
         fieldProps: function () {

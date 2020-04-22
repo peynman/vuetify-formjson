@@ -4,15 +4,15 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="An example for Vuetify FormJSON">
+	<meta name="description" content="An example for Vuetify FormJSON; showcase">
 	<meta name="author" content="peynman.net@gmail.com">
-	<title>ProseMirror Vue EditorView - Examples: Showcase</title>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+	<title>Vuetify FormJSON - Examples: Showcase</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/jsoneditor@8.6.4/dist/jsoneditor.min.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="/vuetify-formjson.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/jsoneditor@8.6.4/dist/jsoneditor.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../vuetify-formjson.min.css">
 	<style>
 	.showcase-column {
 		border-right: 4px solid lightgray;
@@ -36,26 +36,20 @@
 							cols="12"
 							md="6"
 						>
-							<vuetify-formjson :options="exampleOptions" :fields="exmapleFields.fields" v-model="jsonData.output"></vuetify-formjson>
+							<vuetify-formjson :options="exampleOptions" :fields="exmapleFields" v-model="output"></vuetify-formjson>
 						</v-col>
 						<v-col
 							cols="12"
 							md="6"
 							>
-							<v-tabs v-model="tab">
-								<v-tab href="#schema">
-									<span>Schema</span>
-								</v-tab>
-								<v-tab href="#output">
-									<span>Output</span>
-								</v-tab>
-								<v-tab-item value="schema">
-										<vuetify-formjson :fields="schemaFields" v-model="exmapleFields"></vuetify-formjson>
-									</v-tab-item>
-									<v-tab-item value="output">
-										<vuetify-formjson :fields="outputFields" v-model="jsonData"></vuetify-formjson>
-									</v-tab-item>
-							</v-tabs>
+							<span>Form json schema:</span>
+                            <code class="d-block">
+                            {{ JSON.stringify(exmapleFields) }}
+                            </code>
+							<span>Form output:</span>
+                            <code class="d-block">
+                            {{ JSON.stringify(output) }}
+                            </code>
 						</v-col>
 				</v-row>
 				</v-container>
@@ -63,48 +57,45 @@
 		</v-app>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jsoneditor@8.6.4/dist/jsoneditor.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsoneditor@8.6.4/dist/jsoneditor.min.js"></script>
 	<script src="https://unpkg.com/@seregpie/claw@3.0.0"></script>
 	<script src="https://unpkg.com/vueclaw@1.1.0"></script>
 	<script src="https://unpkg.com/vuetify-image-input"></script>
 	<script src="https://cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js"></script>
-	<script src="/vuetify-formjson.min.js"></script>
-	<script src="profiles-json.js"></script>
+	<script src="../vuetify-formjson.min.js"></script>
 	<script>
+        const showcaseFields = {
+            firstname: {
+                type: 'input',
+                input: 'text',
+                label: 'Firstname',
+                props: {
+                    placeholder: 'please enter your firstname',
+                }
+            },
+            lastname: {
+                type: 'input',
+                input: 'text',
+                label: 'Lastname',
+                props: {
+                    hint: 'please enter your lastname',
+                }
+            },
+        };
 		var app = new Vue({
 			el: '#app',
 			vuetify: new Vuetify(),
 			data: () => ({
-				tab: 'output',
-				formData: {},
-				jsonData: {
-					output: {}
-				},
-				schemaFields: {
-					fields: {
-						type: 'input',
-						input: 'json',
-						label: 'FormJSON Schema',
-						height: '600px',
-					}
-				},
-				outputFields: {
-					output: {
-						type: 'input',
-						input: 'json',
-						label: 'FormJSON model',
-						height: '600px',
-					}
-				},
+                output: {},
 				exampleOptions: {
-					class: 'super-dense',
+                    type: 'col',
+					class: 'super-dense ma-2',
 					props: {
-						filled: true,
-						dense: true,
+                        outlined: true,
 					}
 				},
-				exmapleFields: {fields:ProfilesJSON},
+				exmapleFields: showcaseFields,
 			}),
 		})
 	</script>

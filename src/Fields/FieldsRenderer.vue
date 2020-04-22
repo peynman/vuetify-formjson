@@ -32,16 +32,8 @@ export default {
         }
     },
     methods: {
-        focus () {
-
-        },
         getRootComponent () {
-            if (this.options) {
-                if (this.options.root === 'column') {
-                    return 'v-column'
-                }
-            }
-            return 'v-row'
+            return this.options && this.options.type === 'col' ? 'v-col' : 'v-row'
         },
         getRootComponentProps () {
             if (this.options) {
@@ -52,10 +44,14 @@ export default {
             return {}
         },
         getComponentPropsForField (field, key) {
-            if (!field.type) {
+            if (!field.type || field.type === 'row' || field.type === 'col') {
                 return {
                     fields: field.fields,
-                    options: field.options
+                    options: {
+                        type: field.type ? field.type : 'row',
+                        props: field.props,
+                        ...field.options
+                    }
                 }
             }
 

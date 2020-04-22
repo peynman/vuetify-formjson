@@ -7,10 +7,10 @@
 [![License](https://img.shields.io/github/license/peynman/vuetify-formjson.svg?style=flat)](https://github.com/peynman/vuetify-formjson/blob/master/LICENSE)
 
 # Demos:
-* [Example: Showcase](http://github.com)
-* [Example: Most Basic](http://github.com)
-* [Example: Datatable remote](http://github.com)
-* [Example: Components List](http://github.com)
+* [Example: Showcase](dist/examples/showcase.html)
+* [Example: Full Features](dist/examples/fullfeatrues.html)
+* [Example: Datatable remote](#) # comming soon
+* [Example: Components List](#) # comming soon
 
 ## Features
 * Create forms from a json schema
