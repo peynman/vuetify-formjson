@@ -27,6 +27,7 @@
 					class="fill-height"
 					fluid
 				>
+                    <h3>A showcase for Vuetify-FormJSON Package</h3>
 					<v-row
 						align="start"
 						justify="center"
@@ -43,13 +44,9 @@
 							md="6"
 							>
 							<span>Form json schema:</span>
-                            <code class="d-block">
-                            {{ JSON.stringify(exmapleFields) }}
-                            </code>
+                            <code class="d-block">{{JSON.stringify(exmapleFields, null, 2) }}</code>
 							<span>Form output:</span>
-                            <code class="d-block">
-                            {{ JSON.stringify(output) }}
-                            </code>
+                            <code class="d-block">{{JSON.stringify(output, null, 2)}}</code>
 						</v-col>
 				</v-row>
 				</v-container>

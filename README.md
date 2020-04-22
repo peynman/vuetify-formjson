@@ -10,7 +10,7 @@
 
 # Demos:
 * [Example: Showcase](dist/examples/showcase.html)
-* [Example: Full Features](dist/examples/fullfeatrues.html)
+* [Example: Full Features](dist/examples/fullfeatures.html)
 * [Example: Datatable remote](#) # comming soon
 * [Example: Components List](#) # comming soon
 
