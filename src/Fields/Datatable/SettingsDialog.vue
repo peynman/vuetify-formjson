@@ -1,0 +1,58 @@
+<template>
+  <v-dialog v-model="showSettings" max-width="800px">
+    <template v-slot:activator="{ on }">
+      <v-btn :color="showSettings ? 'warning':'secondary'" icon x-small text v-on="on">
+        <v-icon small>{{ showSettings ? 'close': field.settings.icon ? field.settings.icon:'settings_applications' }}</v-icon>
+      </v-btn>
+    </template>
+    <v-card>
+      <v-card-title class="headline">{{ field.settings.title }}</v-card-title>
+      <vf-fields-renderer
+        class="pa-2"
+        v-if="showSettings"
+        :fields="settingsFields"
+        :options="field.settings.options"
+        v-model="value"
+      ></vf-fields-renderer>
+    </v-card>
+  </v-dialog>
+</template>
+
+<script>
+export default {
+    name: 'vf-datatable-dialog-settings',
+    props: {
+        value: {
+            type: Object,
+            default: () => ({})
+        },
+        showSettings: Boolean,
+        field: Object
+    },
+    computed: {
+        settingsFields: function () {
+            return {
+                'hide-columns': {
+                    type: 'input',
+                    input: 'objects-list',
+                    label: 'Hide columns',
+                    objects: this.field.columns,
+                    decorator: {
+                        id: 'column',
+                        title: 'title',
+                        label: ':title'
+                    }
+                }
+            }
+        }
+    },
+    watch: {
+        value: {
+            deep: true,
+            handler () {
+                this.$emit('input', this.value)
+            }
+        }
+    }
+}
+</script>
