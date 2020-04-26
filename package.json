@@ -1,7 +1,7 @@
 {
     "name": "@peynman/vuetify-formjson",
     "description": "Generate Forms using JSON Schema. Based on Vuetify components.",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "license": "GPL-3.0-or-later",
     "author": {
         "name": "Peynman",
@@ -24,6 +24,7 @@
         "dev": "./node_modules/npm-run-all/bin/npm-run-all/index.js --parallel start watch",
         "prod": "./node_modules/npm-run-all/bin/npm-run-all/index.js --parallel start watch:prod",
         "start": "./node_modules/serve/bin/serve.js dist",
+        "lint": "./node_modules/eslint/bin/eslint.js src/**/*.{js,vue} src/*.{js,vue} --fix",
         "test": "echo \"No test specified\""
     },
     "devDependencies": {

@@ -18,6 +18,7 @@ export function install (Vue, options) {
 const plugin = {
     install
 }
+export default plugin
 
 // Auto-install when vue is found (eg. in browser via <script> tag)
 let GlobalVue = null

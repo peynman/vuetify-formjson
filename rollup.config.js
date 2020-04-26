@@ -94,12 +94,12 @@ export default [{
         babel({
             exclude: 'node_modules/**'
         }),
+        production && terser(),
         copyasset({
             targets: [{
                 src: 'node_modules/jsoneditor/dist/img',
                 dest: 'dist'
             }]
-        }),
-        production && terser()
+        })
     ]
 }]

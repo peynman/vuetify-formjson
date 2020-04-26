@@ -9,8 +9,8 @@
 [![License](https://img.shields.io/github/license/peynman/vuetify-formjson.svg?style=flat)](https://github.com/peynman/vuetify-formjson/blob/master/LICENSE)
 
 # Demos:
-* [Example: Showcase](dist/examples/showcase.html)
-* [Example: Full Features](dist/examples/fullfeatures.html)
+* [Example: Showcase](https://peynman.github.io/vuetify-formjson/dist/examples/showcase.html)
+* [Example: Full Features](https://peynman.github.io/vuetify-formjson/dist/examples/fullfeatures.html)
 * [Example: Datatable remote](#) # comming soon
 * [Example: Components List](#) # comming soon
 
@@ -39,24 +39,29 @@ Template:
     // somewhere inside your components
     <vuetify-formjson
         v-model="output"
-        :options="exampleOptions"
-        :fields="exmapleFields"
+        :options="options"
+        :fields="fields"
     >
     </vuetify-formjson>
 </v-app>
 ````
 Script:
 ````js
+import Vue from 'vue'
+import VuetifyFormJSON from '@peynman/vuetify-formjson'
+Vue.use(VuetifyFormJSON)
+// we assume you already regustered vuetify
+
 export default {
     data: () =>({
         output: {},
         options: {
-            // options to pass to form, see Api ref
+            // options to pass to form, see Api
             class: 'ma-2'
         },
         fields: {
             // list of [fields objects] to render on the form
-            //      see Api for full references
+            //      see Api
             username: {
                 type: 'input',
                 input: 'text',
@@ -77,6 +82,9 @@ export default {
 }
 ````
 
+# API
+comming soon
+
 # Developers
 ## Project setup
 ```
@@ -92,6 +100,6 @@ npm run build:prod
 ```
 ### Lints and fixes files
 ```
-npm run build
+npm run lint
 ```
 
