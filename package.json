@@ -1,7 +1,7 @@
 {
     "name": "@peynman/vuetify-formjson",
     "description": "Generate Forms using JSON Schema. Based on Vuetify components.",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "license": "GPL-3.0-or-later",
     "author": {
         "name": "Peynman",
