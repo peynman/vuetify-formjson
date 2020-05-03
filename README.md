@@ -10,9 +10,10 @@
 
 # Demos:
 * [Example: Showcase](https://peynman.github.io/vuetify-formjson/dist/examples/showcase.html)
-* [Example: Full Features](https://peynman.github.io/vuetify-formjson/dist/examples/fullfeatures.html)
+* [Example: 2 way binding](https://peynman.github.io/vuetify-formjson/dist/examples/2way.html)
+* [Example: FormSchema builder](https://peynman.github.io/vuetify-formjson/dist/examples/form-builder.html)
+* [Example: Full features](https://peynman.github.io/vuetify-formjson/dist/examples/fullfeatures.html)
 * [Example: Datatable remote](#) # comming soon
-* [Example: Components List](#) # comming soon
 
 ## Features
 * Create forms from a json schema
