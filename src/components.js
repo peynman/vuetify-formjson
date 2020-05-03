@@ -24,44 +24,6 @@ import VFGroupExpansion from './Fields/GroupExpansion.vue'
 import VFGroupTabs from './Fields/GroupTabs.vue'
 import VFGroupTreeview from './Fields/GroupTreeview.vue'
 
-import {
-    VRow,
-    VCol,
-    VTextField,
-    VSwitch,
-    VSelect,
-    VRange,
-    VRadioGroup,
-    VRadio,
-    VCheckbox,
-    VTooltip,
-    VIcon,
-    VBtn,
-    VDivider,
-    VTabs,
-    VTab,
-    VTabItem,
-    VExpansionPanels,
-    VExpansionPanel,
-    VExpansionPanelHeader,
-    VExpansionPanelContent,
-    VSimpleCheckbox,
-    VDatatable,
-    VToolbar,
-    VSpacer,
-    VAlert,
-    VDialog,
-    VCard,
-    VCardTitle,
-    VCardText,
-    VCardActions,
-    VContainer,
-    VMenu,
-    VColorPicker,
-    VButtonToggle,
-    VAutocomplete
-} from 'vuetify/lib'
-
 export const customComponents = {
     [VuetifyFormJSON.name]: VuetifyFormJSON,
     [VFJSONInput.name]: VFJSONInput,
@@ -87,46 +49,6 @@ export const customComponents = {
     [VFGroupTabs.name]: VFGroupTabs,
     [VFGroupTreeview.name]: VFGroupTreeview,
     [VFFormBuilder.name]: VFFormBuilder
-}
-
-const vCommonComponents = {
-    VRow,
-    VCol,
-    VTextField,
-    VSwitch,
-    VSelect,
-    VRange,
-    VRadioGroup,
-    VRadio,
-    VCheckbox,
-    VTooltip,
-    VIcon,
-    VBtn,
-    VDivider,
-    VTabs,
-    VTab,
-    VTabItem,
-    VExpansionPanels,
-    VExpansionPanel,
-    VExpansionPanelHeader,
-    VExpansionPanelContent,
-    VMenu,
-    VColorPicker,
-    VButtonToggle,
-    VAutocomplete
-}
-const VDatatableComponents = {
-    VDatatable,
-    VToolbar,
-    VSpacer,
-    VAlert,
-    VDialog,
-    VCard,
-    VCardTitle,
-    VCardText,
-    VCardActions,
-    VContainer,
-    VSimpleCheckbox
 }
 
 const ComponentsObjectList = []
@@ -160,17 +82,6 @@ export default {
         }
 
         register(Vue, customComponents)
-    },
-
-    vuetify: {
-        components: {
-            all: {
-                ...vCommonComponents,
-                ...VDatatableComponents
-            },
-            common: vCommonComponents,
-            datatable: VDatatableComponents
-        }
     },
 
     VFTextInput,

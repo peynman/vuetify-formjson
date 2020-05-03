@@ -1,6 +1,5 @@
 import './../sass/vuetify-formjson.scss'
 import Components from './components'
-
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
