@@ -1,9 +1,9 @@
 <template>
   <div
-    :class="`vf-input d-flex flex-column ${field.class}`"
+    :class="`vf-input d-flex flex-column ${field.class ? field.class:''}`"
   >
     <label class="ma-1">{{field.label}}</label>
-    <v-image-input v-model="value" :image-quality="0.85" v-bind="fieldProps" />
+    <v-image-input v-model="devalue" :image-quality="0.85" v-bind="fieldProps" />
   </div>
 </template>
 
@@ -20,6 +20,11 @@ export default {
         field: Object,
         value: String
     },
+    data () {
+        return {
+            devalue: this.value
+        }
+    },
     computed: {
         fieldProps: function () {
             return {
@@ -28,10 +33,16 @@ export default {
         }
     },
     watch: {
+        devalue: {
+            deep: true,
+            handler () {
+                this.$emit('input', this.devalue)
+            }
+        },
         value: {
             deep: true,
             handler () {
-                this.$emit('input', this.value)
+                this.devalue = this.value
             }
         }
     }

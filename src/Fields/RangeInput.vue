@@ -1,8 +1,8 @@
 <template>
   <v-slider
-    v-model="value"
+    v-model="devalue"
     :label="field.label"
-    :class="`vf-input ${field.class}`"
+    :class="`vf-input ${field.class ? field.class:''}`"
     thumb-label
     hide-details="auto"
     v-bind="fieldProps"
@@ -19,6 +19,11 @@ export default {
         field: Object,
         value: Number
     },
+    data () {
+        return {
+            devalue: this.value
+        }
+    },
     computed: {
         fieldProps: function () {
             return {
@@ -28,7 +33,15 @@ export default {
     },
     methods: {
         updateInput: function () {
-            this.$emit('input', this.value)
+            this.$emit('input', this.devalue)
+        }
+    },
+    watch: {
+        value: {
+            deep: true,
+            handler () {
+                this.devalue = this.value
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div :class="`vf-input d-flex flex-column flex-grow-1 ${field.class}`">
+  <div :class="`vf-input d-flex flex-column flex-grow-1 ${field.class ? field.class:''}`">
     <v-alert
       v-model="alert.show"
       :type="alert.type"
@@ -49,8 +49,8 @@
       :calculate-widths="true"
       v-model="selected"
       selectable-key
-      @click:row="onToggleItem"
       v-bind="fieldProps"
+      @click:row="onToggleItem"
     >
       <template v-slot:item.data-table-select="{item, isSelected, select}">
         <v-simple-checkbox class="d-inline" :value="isSelected" @input="select($event)"></v-simple-checkbox>
@@ -61,7 +61,7 @@
           v-if="field.edit"
           icon
           x-small
-          @click="() => {createModel = {...item}; editMode = true; showCreate = true;}"
+          @click="onOpenEditDialog(item)"
         >
           <v-icon x-small>{{ field.edit.icon ? field.edit.icon:'edit' }}</v-icon>
         </v-btn>
@@ -100,6 +100,29 @@ export default {
         field: Object,
         id: String,
         value: Array
+    },
+    data () {
+        return {
+            createModel: {},
+            showAlert: false,
+            showDelete: false,
+            showCreate: false,
+            loading: false,
+            editMode: false,
+            loadingId: 0,
+            search: '',
+            items: [],
+            selected: [],
+            expanded: [],
+            options: {},
+            total: 0,
+            response: null,
+            sortBy: null,
+            sortDesc: null,
+            expandTemplate: null,
+            expandTemplateDefaultMetadata: null,
+            devalue: this.value
+        }
     },
     computed: {
         fieldProps: function () {
@@ -169,26 +192,6 @@ export default {
             }
         }
     },
-    data: () => ({
-        createModel: {},
-        showAlert: false,
-        showDelete: false,
-        showCreate: false,
-        loading: false,
-        editMode: false,
-        loadingId: 0,
-        search: '',
-        items: [],
-        selected: [],
-        expanded: [],
-        options: {},
-        total: 0,
-        response: null,
-        sortBy: null,
-        sortDesc: null,
-        expandTemplate: null,
-        expandTemplateDefaultMetadata: null
-    }),
     methods: {
         updateTable () {
             this.loading = true
@@ -265,12 +268,6 @@ export default {
             }
             this.selected = []
         },
-        onEditItem (item) {
-            this.items.unshift({
-                id: 'id#' + Math.random() * Number.MAX_SAFE_INTEGER,
-                ...this.createModel
-            })
-        },
         onCreateNew () {
             this.items.unshift({
                 id: 'id#' + Math.random() * Number.MAX_SAFE_INTEGER,
@@ -280,6 +277,7 @@ export default {
         },
         onUpdateNew () {
             const self = this
+            console.log(this.items, self.createModel)
             this.items.forEach((item) => {
                 if (item.id === self.createModel.id) {
                     for (const prop in self.createModel) {
@@ -293,6 +291,12 @@ export default {
         onCancelNew () {
             this.showCreate = false
             this.editMode = false
+        },
+        onOpenEditDialog (item) {
+            console.log(item)
+            this.createModel = Object.assign({}, item)
+            this.editMode = true
+            this.showCreate = true
         },
         toggleArray (arr, item) {
             const index = arr.indexOf(item)
@@ -316,18 +320,24 @@ export default {
                 this.updateTable()
             }
         },
+        devalue: {
+            deep: true,
+            handler () {
+                this.$emit('input', this.devalue)
+            }
+        },
         value: {
             deep: true,
             handler () {
-                this.$emit('input', this.value)
+                this.devalue = this.value
             }
         },
         items: {
             deep: true,
             handler () {
                 if (this.field.create) {
-                    this.value = [].concat(this.items)
-                    this.total = this.value.length
+                    this.devalue = [].concat(this.items)
+                    this.total = this.devalue.length
                 }
             }
         },

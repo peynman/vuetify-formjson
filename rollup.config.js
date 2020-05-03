@@ -22,7 +22,9 @@ const globals = {
     vuetify: 'Vuetify',
     jsoneditor: 'JSONEditor',
     'vuetify-image-input': 'VuetifyImageInput',
-    axios: 'axios'
+    axios: 'axios',
+    'vuetify/lib': 'Vuetify',
+    'tree-model': 'TreeModel'
 }
 const outputs = [{
     name: 'VuetifyFormJSON',
@@ -53,7 +55,9 @@ export default [{
         'vuetify',
         'vuetify-image-input',
         'axios',
-        'jsoneditor'
+        'jsoneditor',
+        'vuetify/lib',
+        'tree-model'
     ],
     input: 'src/index.js',
     output: outputs,

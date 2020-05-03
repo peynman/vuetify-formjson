@@ -1,8 +1,8 @@
 <template>
   <v-text-field
-    v-model="value"
+    v-model="devalue"
     :label="field.label"
-    :class="`vf-input ${field.class}`"
+    :class="`vf-input ${field.class ? field.class:''}`"
     v-bind="fieldProps"
     hide-details="auto"
     @keyup.native="updateInput($event)"
@@ -15,10 +15,11 @@ export default {
     props: {
         id: String,
         field: Object,
-        value: Object,
-        updateKeyCodes: {
-            type: Array,
-            default: () => ([])
+        value: [Object, String]
+    },
+    data () {
+        return {
+            devalue: this.value
         }
     },
     computed: {
@@ -30,8 +31,16 @@ export default {
     },
     methods: {
         updateInput: function (ev) {
-            if (!this.updateKeyCodes || this.updateKeyCodes.length === 0 || this.updateKeyCodes.includes(ev.keyCode)) { // update input on tab/enter pressed
-                this.$emit('input', this.value)
+            if (!this.field.updateKeyCodes || this.field.updateKeyCodes.length === 0 || this.field.updateKeyCodes.includes(ev.keyCode)) { // update input on tab/enter pressed
+                this.$emit('input', this.devalue)
+            }
+        }
+    },
+    watch: {
+        value: {
+            deep: true,
+            handler () {
+                this.devalue = this.value
             }
         }
     }

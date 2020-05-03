@@ -1,9 +1,9 @@
 <template>
   <v-text-field
     ref="inputValue"
-    v-model="value[current.id]"
+    v-model="devalue[current ? current.id: '']"
     :label="field.label"
-    :class="`vf-input ${field.class}`"
+    :class="`vf-input ${field.class ? field.class:''}`"
     hide-details="auto"
     v-bind="fieldProps"
     @input="updateInput()"
@@ -41,6 +41,12 @@ export default {
             default: () => ({})
         }
     },
+    data () {
+        return {
+            currIndex: 0,
+            devalue: this.value
+        }
+    },
     computed: {
         fieldProps: function () {
             return {
@@ -49,39 +55,50 @@ export default {
             }
         },
         modes: function () {
-            return this.field.modes
+            if (this.field.modes) {
+                return this.field.modes
+            }
+
+            return []
         },
         current: function () {
-            return this.modes[this.currIndex]
+            if (this.modes.length > 0 && this.currIndex >= 0) {
+                return this.modes[this.currIndex]
+            }
+
+            return null
         },
         appendMode: function () {
             return this.field.slot ? this.field.slot : 'prepend'
         }
     },
-    data: () => ({
-        currIndex: 0
-    }),
     methods: {
         updateInput: function () {
-            this.$emit('input', this.value)
+            this.$emit('input', this.devalue)
         },
         nextMode () {
-            this.currIndex =
-        this.currIndex === this.modes.length - 1 ? 0 : this.currIndex + 1
+            this.currIndex = this.currIndex === this.modes.length - 1 ? 0 : this.currIndex + 1
+        }
+    },
+    watch: {
+        value: {
+            deep: true,
+            handler () {
+                this.devalue = this.value
+            }
         }
     },
     created () {
-        if (typeof this.value === 'object' && this.value.id) {
+        if (typeof this.devalue === 'object' && this.devalue.id) {
             let indexer = 0
             const self = this
             this.modes.forEach(m => {
-                if (m.id === self.value.id) {
+                if (m.id === self.devalue.id) {
                     self.currIndex = indexer
                 }
                 indexer++
             })
         }
-        this.current = this.modes[this.currIndex]
     }
 }
 </script>

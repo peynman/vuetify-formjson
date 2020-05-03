@@ -1,10 +1,10 @@
 <template>
   <v-select
-    v-model="value"
+    v-model="devalue"
     :items="field.objects"
     :label="field.label"
     :multiple="field.multiple"
-    :class="`vf-input ${field.class}`"
+    :class="`vf-input ${field.class ? field.class:''}`"
     :menu-props="{ maxHeight: '400' }"
     hide-details="auto"
     item-text="title"
@@ -22,6 +22,11 @@ export default {
         id: String,
         value: [Array, String]
     },
+    data () {
+        return {
+            devalue: this.value
+        }
+    },
     computed: {
         fieldProps: function () {
             return {
@@ -30,8 +35,14 @@ export default {
         }
     },
     watch: {
-        value: function () {
-            this.$emit('input', this.value)
+        devalue: function () {
+            this.$emit('input', this.devalue)
+        },
+        value: {
+            deep: true,
+            handler () {
+                this.devalue = this.value
+            }
         }
     }
 }

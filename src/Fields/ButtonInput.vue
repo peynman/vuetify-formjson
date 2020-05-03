@@ -1,8 +1,8 @@
 <template>
   <v-btn
-    :class="`vf-input vf-btn ${field.class}`"
+    :class="`vf-input vf-btn ${field.class ? field.class:''}`"
     v-bind="fieldProps"
-    @click="field.props.click"
+    @click="onButtonClick"
   >
     <span v-if="field.label">{{ field.label }}</span>
     <v-icon v-if="field.icon" v-bind="fieldIconProps">{{ field.icon }}</v-icon>
@@ -14,8 +14,7 @@ export default {
     name: 'vf-button-input',
     props: {
         id: String,
-        field: Object,
-        value: Object
+        field: Object
     },
     computed: {
         fieldProps: function () {
@@ -31,7 +30,11 @@ export default {
         }
     },
     methods: {
-
+        onButtonClick: function (e) {
+            if (this.field.props && this.field.props.click) {
+                this.field.props.click(e)
+            }
+        }
     }
 }
 </script>

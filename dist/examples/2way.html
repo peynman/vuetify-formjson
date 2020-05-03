@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="An example for Vuetify FormJSON; 2 Way binding">
+	<meta name="author" content="peynman.net@gmail.com">
+	<title>Vuetify FormJSON - Examples: Showcase</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/jsoneditor@8.6.4/dist/jsoneditor.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../vuetify-formjson.min.css">
+	<style>
+	.showcase-column {
+		border-right: 4px solid lightgray;
+	}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<v-app>
+			<v-content>
+				<v-container
+					class="fill-height"
+					fluid
+				>
+                    <h3>A showcase for Vuetify-FormJSON Package</h3>
+					<v-row
+						align="start"
+						justify="center"
+					>
+						<v-col
+						class="showcase-column"
+							cols="12"
+							md="6"
+						>
+							<vuetify-formjson :options="exampleOptions" :fields="exmapleFields" v-model="output.json"></vuetify-formjson>
+						</v-col>
+						<v-col
+							cols="12"
+							md="6"
+							>
+							<span>Form json schema:</span>
+                            <code class="d-block">{{JSON.stringify(exmapleFields, null, 2) }}</code>
+							<span>Form output with 2 way binding to input component:</span>
+							<vuetify-formjson :fields="exampleOutputForm" v-model="output"></vuetify-formjson>
+						</v-col>
+				</v-row>
+				</v-container>
+			</v-content>
+		</v-app>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsoneditor@8.6.4/dist/jsoneditor.min.js"></script>
+	<script src="https://unpkg.com/@seregpie/claw@3.0.0"></script>
+	<script src="https://unpkg.com/vueclaw@1.1.0"></script>
+	<script src="https://unpkg.com/vuetify-image-input"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js"></script>
+	<script src="../vuetify-formjson.min.js"></script>
+	<script>
+        const showcaseFields = {
+            firstname: {
+                type: 'input',
+                input: 'text',
+                label: 'Firstname',
+                props: {
+                    placeholder: 'please enter your firstname',
+                }
+            },
+            lastname: {
+                type: 'input',
+                input: 'text',
+                label: 'Lastname',
+                props: {
+                    hint: 'please enter your lastname',
+                }
+            },
+        };
+		var app = new Vue({
+			el: '#app',
+			vuetify: new Vuetify(),
+			data: () => ({
+                output: { json: {} },
+                exampleOutputForm: {
+                    json: {
+                        type: 'input',
+                        input: 'json',
+                        label: 'Here you can see and change formjson output model'
+                    }
+                },
+				exampleOptions: {
+                    type: 'col',
+					class: 'super-dense ma-2',
+					props: {
+                        outlined: true,
+					}
+				},
+				exmapleFields: showcaseFields,
+			}),
+		})
+	</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 {
     "name": "@peynman/vuetify-formjson",
     "description": "Generate Forms using JSON Schema. Based on Vuetify components.",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "license": "GPL-3.0-or-later",
     "author": {
         "name": "Peynman",
@@ -12,7 +12,15 @@
     "main": "dist/vuetify-formjson.umd.js",
     "module": "dist/vuetify-formjson.esm.js",
     "unpkg": "dist/vuetify-formjson.min.js",
-    "keywords": ["vue", "vuetify", "form", "json", "schema", "input", "datatable"],
+    "keywords": [
+        "vue",
+        "vuetify",
+        "form",
+        "json",
+        "schema",
+        "input",
+        "datatable"
+    ],
     "browser": {
         "./components": "src/components.js"
     },
@@ -64,6 +72,7 @@
     "dependencies": {
         "axios": "^0.19.2",
         "jsoneditor": "^8.6.6",
+        "tree-model": "^1.0.7",
         "vue": "^2.6.11",
         "vue-axios": "^2.1.5",
         "vuetify": "^2.2.23",

@@ -1,11 +1,11 @@
 <template>
-  <div :class="`vf-input d-flex flex-column ${field.class}`">
+  <div :class="`vf-input d-flex flex-column ${field.class ? field.class:''}`">
     <label :class="field.props && field.props.error ? 'red--text':''">{{ field.label }}</label>
     <div class="row ma-0">
       <v-checkbox
         v-for="item in field.objects"
         :key="`${id}-checkbox-${item[decorator.id]}`"
-        v-model="value[item[decorator.id]]"
+        v-model="devalue[item[decorator.id]]"
         :class="`ma-0 pa-0 me-4 ${item.props ? item.props.class:null}`"
         :label="getLabel(item)"
         v-bind="getProps(item)"
@@ -32,6 +32,11 @@ export default {
             default: () => ({})
         }
     },
+    data () {
+        return {
+            devalue: this.value
+        }
+    },
     computed: {
         decorator: function () {
             return {
@@ -56,8 +61,14 @@ export default {
         }
     },
     watch: {
-        value: function () {
-            this.$emit('input', this.value)
+        devalue: function () {
+            this.$emit('input', this.devalue)
+        },
+        value: {
+            deep: true,
+            handler () {
+                this.devalue = this.value
+            }
         }
     }
 }

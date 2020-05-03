@@ -10,11 +10,14 @@ export default {
         field: Object,
         value: Number
     },
-    data: () => ({
-        innerValue: {}
-    }),
+    data () {
+        return {
+            innerValue: {},
+            devalue: this.value
+        }
+    },
     watch: {
-        value: function () {
+        devalue: function () {
             const newInner = {}
             this.field.objects.forEach((i) => {
                 if ((this.value & i.id) !== 0) {
@@ -22,6 +25,12 @@ export default {
                 }
             })
             this.innerValue = newInner
+        },
+        value: {
+            deep: true,
+            handler () {
+                this.devalue = this.value
+            }
         },
         innerValue: {
             deep: true,
@@ -34,8 +43,8 @@ export default {
                         }
                     }
                 }
-                this.value = flag
-                this.$emit('input', this.value)
+                this.devalue = flag
+                this.$emit('input', this.devalue)
             }
         }
     }

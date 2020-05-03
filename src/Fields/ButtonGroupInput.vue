@@ -1,7 +1,7 @@
 <template>
-  <div :class="`vf-input d-flex flex-grow-1 flex-row flex-wrap align-center justify-space-between ${field.class}`">
+  <div :class="`vf-input d-flex flex-grow-1 flex-row flex-wrap align-center justify-space-between ${field.class ? field.class:''}`">
     <label class="flex-grow-0">{{field.label}}</label>
-    <v-btn-toggle class="d-flex flex-grow-1 flex-row justify-end" v-model="value" v-bind="fieldProps">
+    <v-btn-toggle class="d-flex flex-grow-1 flex-row justify-end" v-model="devalue" v-bind="fieldProps">
       <div v-for="(btn, index) in field.objects" :key="`${id}-btn-grp-${index}`">
         <v-tooltip v-if="btn.title">
           <template v-slot:activator="{on}">
@@ -29,6 +29,11 @@ export default {
         id: String,
         value: [Array, Number]
     },
+    data () {
+        return {
+            devalue: this.value
+        }
+    },
     computed: {
         fieldProps: function () {
             return {
@@ -45,8 +50,14 @@ export default {
         }
     },
     watch: {
-        value: function () {
-            this.$emit('input', this.value)
+        devalue: function () {
+            this.$emit('input', this.devalue)
+        },
+        value: {
+            deep: true,
+            handler () {
+                this.devalue = this.value
+            }
         }
     }
 }

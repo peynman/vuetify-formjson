@@ -16,7 +16,9 @@ export function install (Vue, options) {
 
 // Create module definition for Vue.use()
 const plugin = {
-    install
+    install,
+
+    Components
 }
 export default plugin
 

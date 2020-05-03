@@ -1,5 +1,5 @@
 <template>
-  <div :class="`vf-input d-flex flex-grow-1 flex-column ${field.class}`">
+  <div :class="`vf-input d-flex flex-grow-1 flex-column ${field.class ? field.class:''}`">
     <div class="d-flex flex-row align-center mb-1">
       <label :class="field.props && field.props.error ? 'red--text me-1':'me-1'">{{ field.label }}</label>
       <v-btn
@@ -49,13 +49,16 @@ export default {
         field: Object,
         value: [Object, String]
     },
-    data: () => ({
-        options: {
-            mode: 'code'
-        },
-        editor: null,
-        ignoreUpdate: false
-    }),
+    data () {
+        return {
+            options: {
+                mode: 'code'
+            },
+            editor: null,
+            ignoreUpdate: false,
+            devalue: this.value
+        }
+    },
     mounted: function () {
         const component = this
         const container = this.$refs.editor
@@ -63,9 +66,9 @@ export default {
             ...this.options,
             onChange: function () {
                 try {
-                    this.value = component.editor.get()
+                    this.devalue = component.editor.get()
                     this.ignoreUpdate = true
-                    component.$emit('input', this.value)
+                    component.$emit('input', this.devalue)
                 } catch (ex) {
                     // console.error(ex);
                 }
@@ -73,11 +76,11 @@ export default {
         }
         if (container) {
             this.editor = new JSONEditor(container, options)
-            if (this.value) {
-                if (typeof this.value === 'string') {
-                    this.editor.set(JSON.parse(this.value))
+            if (this.devalue) {
+                if (typeof this.devalue === 'string') {
+                    this.editor.set(JSON.parse(this.devalue))
                 } else {
-                    this.editor.set(this.value)
+                    this.editor.set(this.devalue)
                 }
             } else {
                 this.editor.set({})
@@ -85,12 +88,18 @@ export default {
         }
     },
     watch: {
-        value: {
+        devalue: {
             deep: true,
             handler () {
                 const pos = this.editor.getTextSelection()
-                this.editor.set(this.value)
+                this.editor.set(this.devalue)
                 this.editor.setTextSelection(pos.start, pos.end)
+            }
+        },
+        value: {
+            deep: true,
+            handler () {
+                this.devalue = this.value
             }
         }
     },

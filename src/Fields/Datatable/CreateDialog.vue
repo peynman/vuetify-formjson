@@ -14,7 +14,7 @@
             class="pa-2"
             :fields="fieldCreateFields"
             :options="field.create.options"
-            v-model="value"
+            v-model="devalue"
           ></vf-fields-renderer>
         </v-container>
       </v-card-text>
@@ -34,9 +34,12 @@ export default {
         forceShow: Boolean,
         editMode: Boolean
     },
-    data: () => ({
-        showCreate: false
-    }),
+    data () {
+        return {
+            showCreate: false,
+            devalue: this.value
+        }
+    },
     computed: {
         fieldCreateFields: function () {
             const self = this
@@ -63,7 +66,7 @@ export default {
                                 color: 'primary',
                                 small: true,
                                 click: () => {
-                                    self.$emit('on-create', self.value)
+                                    self.$emit('on-create', self.devalue)
                                     self.showCreate = false
                                 }
                             }
@@ -82,8 +85,8 @@ export default {
                                 color: 'primary',
                                 small: true,
                                 click: () => {
-                                    self.$emit('on-create', self.value)
-                                    self.value = Object.assign({})
+                                    self.$emit('on-create', self.devalue)
+                                    self.devalue = Object.assign({})
                                 }
                             }
                         },
@@ -126,8 +129,8 @@ export default {
                                 color: 'primary',
                                 small: true,
                                 click: () => {
-                                    self.$emit('on-update', self.value)
-                                    self.value = Object.assign({})
+                                    self.$emit('on-update', self.devalue)
+                                    self.devalue = Object.assign({})
                                 }
                             }
                         },
@@ -157,10 +160,16 @@ export default {
         }
     },
     watch: {
+        devalue: {
+            deep: true,
+            handler () {
+                this.$emit('input', this.devalue)
+            }
+        },
         value: {
             deep: true,
             handler () {
-                this.$emit('input', this.value)
+                this.devalue = this.value
             }
         },
         forceShow: function () {

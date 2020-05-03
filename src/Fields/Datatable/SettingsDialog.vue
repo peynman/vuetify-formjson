@@ -12,7 +12,7 @@
         v-if="showSettings"
         :fields="settingsFields"
         :options="field.settings.options"
-        v-model="value"
+        v-model="devalue"
       ></vf-fields-renderer>
     </v-card>
   </v-dialog>
@@ -28,6 +28,11 @@ export default {
         },
         showSettings: Boolean,
         field: Object
+    },
+    data () {
+        return {
+            devalue: this.value
+        }
     },
     computed: {
         settingsFields: function () {
@@ -47,10 +52,16 @@ export default {
         }
     },
     watch: {
+        devalue: {
+            deep: true,
+            handler () {
+                this.$emit('input', this.devalue)
+            }
+        },
         value: {
             deep: true,
             handler () {
-                this.$emit('input', this.value)
+                this.devalue = this.value
             }
         }
     }

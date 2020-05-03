@@ -1,11 +1,11 @@
 <template>
-  <component class="ma-0 pa-0" :is="getRootComponent()" v-bind="getRootComponentProps()">
+  <component :class="`ma-0 pa-0 ${options && options.class ? options.class : ''}`" :is="getRootComponent()" v-bind="getRootComponentProps()">
     <component
       v-for="(field, key) in fields"
       :ref="key"
       :key="`${id}-properties-${key}`"
       :is="getComponentForField(field)"
-      v-model="value[key]"
+      v-model="devalue[key]"
       v-bind="getComponentPropsForField(field)"
     ></component>
   </component>
@@ -21,19 +21,40 @@ export default {
             type: Object,
             default: () => ({})
         },
-        options: Object
+        options: Object,
+        onUpdated: Function
+    },
+    data () {
+        return {
+            devalue: this.value
+        }
     },
     watch: {
-        value: {
+        devalue: {
             deep: true,
             handler: function () {
-                this.$emit('input', this.value)
+                if (this.onUpdated) {
+                    this.onUpdated(this.devalue)
+                }
+                this.$emit('input', this.devalue)
+            }
+        },
+        value: {
+            deep: true,
+            handler () {
+                this.devalue = this.value
             }
         }
     },
     methods: {
         getRootComponent () {
-            return this.options && this.options.type === 'col' ? 'v-col' : 'v-row'
+            if (this.options) {
+                switch (this.options.type) {
+                case 'col': return 'v-col'
+                case 'component': return this.options.component
+                }
+            }
+            return 'v-row'
         },
         getRootComponentProps () {
             if (this.options) {
@@ -61,9 +82,7 @@ export default {
             }
             if (this.options) {
                 if (this.options.class) {
-                    props.field.class =
-            this.options.class +
-            (props.field.class ? ' ' + props.field.class : '')
+                    props.field.class = this.options.class + (props.field.class ? ' ' + props.field.class : '')
                 }
                 if (this.options.props) {
                     props.field.props = {

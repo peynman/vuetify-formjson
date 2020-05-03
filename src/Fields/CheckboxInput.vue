@@ -1,8 +1,8 @@
 <template>
   <v-checkbox
-    v-model="value"
+    v-model="devalue"
     :label="field.label"
-    :class="`vf-input ${field.class}`"
+    :class="`vf-input ${field.class ? field.class:''}`"
     v-bind="fieldProps"
     hide-details="auto"
     @change="updateInput"
@@ -17,6 +17,11 @@ export default {
         field: Object,
         value: [Boolean, String, Number]
     },
+    data () {
+        return {
+            devalue: this.value
+        }
+    },
     computed: {
         fieldProps: function () {
             return {
@@ -26,7 +31,15 @@ export default {
     },
     methods: {
         updateInput: function (ev) {
-            this.$emit('input', this.value)
+            this.$emit('input', this.devalue)
+        }
+    },
+    watch: {
+        value: {
+            deep: true,
+            handler () {
+                this.devalue = this.value
+            }
         }
     }
 }

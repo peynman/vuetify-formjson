@@ -1,7 +1,7 @@
 <template>
   <v-text-field
-    v-model="value"
-    :class="`vf-input ${field.class}`"
+    v-model="devalue"
+    :class="`vf-input ${field.class ? field.class:''}`"
     :label="field.label"
     hide-details="auto"
     mask="####"
@@ -53,9 +53,15 @@ export default {
         field: Object,
         value: String
     },
+    data () {
+        return {
+            colorsMenu: false,
+            devalue: this.value
+        }
+    },
     computed: {
         getColorValue: function () {
-            return this.value
+            return this.devalue
         },
         fieldProps: function () {
             return {
@@ -68,21 +74,23 @@ export default {
             }
         }
     },
-    data: () => ({
-        ignore: false
-    }),
     methods: {
         colorTextChanged: function (ev) {
-            this.$emit('input', this.value)
-            this.ignore = true
+            this.$emit('input', this.devalue)
         },
         colorSelected: function (c) {
-            if (this.ignore) {
-                this.ignore = false
-            } else {
-                this.value = c.hexa
+            if (this.colorsMenu) {
+                this.devalue = c.hexa
+                this.$emit('input', this.devalue)
             }
-            this.$emit('input', this.value)
+        }
+    },
+    watch: {
+        value: {
+            deep: true,
+            handler () {
+                this.devalue = this.value
+            }
         }
     }
 }
