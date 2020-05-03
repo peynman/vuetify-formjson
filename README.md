@@ -186,7 +186,7 @@ export default new Vuetify({
       1. Each value object requires to have a type, you can set other properties of the input based on its type, currently these types are available: ``row``, ``col``, ``input``, ``group``, ``component``
   1.  ``options``: some options to control ``vuetify-formjson`` and its components behaviour
 
-Here is a list of all availabel types:
+Here is a list of all availabel components to render (inputs, groups or custom components):
 | Component | Type | Sample Object |
 | ---: | :---: | :--- |
 | Text field | input | ```{ type: 'input', input: 'text', label: 'Label', class: 'extra classes', props: { ...pass to v-text-field }}```|
