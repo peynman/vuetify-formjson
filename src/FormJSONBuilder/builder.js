@@ -59,7 +59,7 @@ export default {
     methods: {
         getRemoveAction: function (items, item) {
             return {
-                type: 'menu',
+                type: 'confirm',
                 iconProps: {
                     small: true,
                     color: 'red'
@@ -69,29 +69,11 @@ export default {
                     small: true,
                     icon: true
                 },
-                fields: {
-                    cancel: {
-                        type: 'input',
-                        input: 'button',
-                        label: 'Cancel',
-                        class: 'col-12 ma-0',
-                        props: {
-                            text: true,
-                            color: 'primary'
-                        }
-                    },
-                    accept: {
-                        type: 'input',
-                        input: 'button',
-                        label: 'Remove',
-                        class: 'col-12 ma-0',
-                        props: {
-                            text: true,
-                            color: 'red',
-                            click: () => {
-                                item.drop()
-                            }
-                        }
+                confirm: 'Delete',
+                message: 'Are you sure you want to remove item ' + item.model.id + '?',
+                callback: (confirm) => {
+                    if (confirm) {
+                        item.drop()
                     }
                 }
             }

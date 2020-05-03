@@ -3,6 +3,7 @@
     :class="`vf-input overflow-hidden d-flex flex-column flex-grow-1 ${field.class ? field.class:''}`"
     style="position: relative;"
   >
+    <confirm ref="confirm"></confirm>
     <v-menu :close-on-content-click="false" v-model="menu" :position-x="menuX" :position-y="menuY">
       <v-card>
         <vf-fields-renderer
@@ -58,8 +59,12 @@
 
 <script>
 import { EasyNestedObject } from './../mixins'
+import confirm from './../Confirm.vue'
 
 export default {
+    components: {
+        confirm
+    },
     mixins: [EasyNestedObject],
     name: 'vf-group-treeview',
     props: {
@@ -144,6 +149,17 @@ export default {
                 this.menuY = e.clientY
                 this.$nextTick(() => {
                     this.menu = true
+                })
+                break
+            case 'confirm':
+                this.currentActionItem = item
+                this.currentAction = action
+                this.actionName = key
+                this.$refs.confirm.open(
+                    action.confirm ? action.confirm : 'Yes', action.message ? action.message : 'Are you sure?',
+                    action.dialogProps ? action.dialogProps : { color: 'red' }
+                ).then((confirm) => {
+                    if (action.callback) { action.callback(confirm) }
                 })
                 break
             case 'button':

@@ -19,7 +19,7 @@
 <script>
 import FormJSONBuilder from './builder'
 import { JSONWorkspace } from './../mixins'
-import confirm from './Confirm.vue'
+import confirm from './../Confirm.vue'
 import TreeModel from 'tree-model'
 
 export default {

@@ -34,12 +34,14 @@ export default {
                 id: {
                     type: 'input',
                     input: 'text',
+                    class: 'col-6 pe-0 ps-0',
                     label: 'ID'
                 },
                 title: {
                     type: 'input',
                     input: 'text',
-                    label: 'ID'
+                    class: 'col-6 pe-0 ps-0',
+                    label: 'Title'
                 }
             }
         },
