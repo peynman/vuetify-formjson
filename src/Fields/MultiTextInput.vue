@@ -7,6 +7,7 @@
     hide-details="auto"
     v-bind="fieldProps"
     @input="updateInput()"
+    v-on="eventHandlers"
   >
     <template v-slot:[appendMode]>
       <v-tooltip top>
@@ -31,7 +32,10 @@
   </v-text-field>
 </template>
 <script>
+import BaseComponent from './mixins'
+
 export default {
+    mixins: [BaseComponent],
     name: 'vf-multitext-input',
     props: {
         id: String,
@@ -43,17 +47,10 @@ export default {
     },
     data () {
         return {
-            currIndex: 0,
-            devalue: this.value
+            currIndex: 0
         }
     },
     computed: {
-        fieldProps: function () {
-            return {
-                ...this.field.props,
-                ...(this.current && this.current.props ? this.current.props : {})
-            }
-        },
         modes: function () {
             if (this.field.modes) {
                 return this.field.modes
@@ -73,11 +70,22 @@ export default {
         }
     },
     methods: {
-        updateInput: function () {
+        updateInput () {
             this.$emit('input', this.devalue)
         },
         nextMode () {
             this.currIndex = this.currIndex === this.modes.length - 1 ? 0 : this.currIndex + 1
+        },
+        resetValue () {
+            if (typeof this.devalue === 'object' && this.devalue.id) {
+                let indexer = 0
+                this.modes.forEach(m => {
+                    if (m.id === self.devalue.id) {
+                        this.currIndex = indexer
+                    }
+                    indexer++
+                })
+            }
         }
     },
     watch: {
@@ -85,20 +93,12 @@ export default {
             deep: true,
             handler () {
                 this.devalue = this.value
+                this.resetValue()
             }
         }
     },
     created () {
-        if (typeof this.devalue === 'object' && this.devalue.id) {
-            let indexer = 0
-            const self = this
-            this.modes.forEach(m => {
-                if (m.id === self.devalue.id) {
-                    self.currIndex = indexer
-                }
-                indexer++
-            })
-        }
+        this.resetValue()
     }
 }
 </script>

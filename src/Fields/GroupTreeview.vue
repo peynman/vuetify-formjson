@@ -4,20 +4,27 @@
     style="position: relative;"
   >
     <confirm ref="confirm"></confirm>
-    <v-menu :close-on-content-click="false" v-model="menu" :position-x="menuX" :position-y="menuY">
-      <v-card>
-        <vf-fields-renderer
+    <v-menu v-model="menu" :position-x="menuX" :position-y="menuY">
+      <vf-fields-renderer
           v-if="currentAction"
           :on-updated="currentAction.onUpdated"
           :fields="currentAction.fields"
           v-model="currentActionValue"
           v-bind="currentActionProps"
-        ></vf-fields-renderer>
-      </v-card>
+      ></vf-fields-renderer>
     </v-menu>
+    <v-dialog v-model="dialog" v-bind="currentAction && currentAction.dialog && currentAction.dialog.props ? currentAction.dialog.props : {}">
+        <vf-fields-renderer
+            v-if="currentAction"
+            :on-updated="currentAction.onUpdated"
+            :fields="currentAction.fields"
+            v-model="currentActionValue"
+            v-bind="currentActionProps"
+        ></vf-fields-renderer>
+    </v-dialog>
     <label v-if="field.label">{{ field.label }}</label>
     <v-container class="fill-height align-start ma-0 pa-0">
-      <v-treeview :items="devalue" v-bind="field.props">
+      <v-treeview :items="devalue" v-bind="fieldProps" v-on="eventHandlers">
         <template v-for="slot in actionSlots" v-slot:[slot]="{item}">
           <div
             :key="`${id}-actions-${slot}`"
@@ -39,7 +46,7 @@
           <div class="d-flex flex column">
             <div class="d-flex flex-row justify-space-between align-center">
               <v-icon v-if="decorator.icon">{{ }}</v-icon>
-              <label>{{ getLabel(item) }}</label>
+              <label>{{ getDecorableLabel(item) }}</label>
             </div>
           </div>
         </template>
@@ -58,14 +65,14 @@
 </template>
 
 <script>
-import { EasyNestedObject } from './../mixins'
+import BaseComponent, { DecoratableComponent, EasyNestedObject } from './mixins'
 import confirm from './../Confirm.vue'
 
 export default {
     components: {
         confirm
     },
-    mixins: [EasyNestedObject],
+    mixins: [BaseComponent, EasyNestedObject, DecoratableComponent],
     name: 'vf-group-treeview',
     props: {
         field: Object,
@@ -81,11 +88,11 @@ export default {
             menuY: 0,
             menu: false,
             drawer: false,
+            dialog: false,
             currentAction: null,
             currentActionItem: null,
             actionName: null,
             actionSlots: ['append', 'prepend'],
-            devalue: this.value,
             pauseWatch: false
         }
     },
@@ -98,14 +105,6 @@ export default {
                     : {})
             }
         },
-        decorator: function () {
-            return {
-                id: this.field.decorator ? this.field.decorator.id : 'id',
-                title: this.field.decorator ? this.field.decorator.title : 'title',
-                label: this.field.decorator ? this.field.decorator.label : ':id#:title',
-                ...this.field.decorator
-            }
-        },
         currentActionValue: {
             get () {
                 return this.currentActionItem.value[this.actionName]
@@ -115,13 +114,13 @@ export default {
             }
         },
         currentActionProps: function () {
-            return { ...this.field.formProps, ...this.currentActionItem.formProps }
+            return { ...this.field.formProps, ...this.currentAction.formProps }
         }
     },
     methods: {
         onActionClicked: function (e, slot, action, key, item) {
             switch (action.type) {
-            case 'formjson':
+            case 'drawer':
                 if (!item.value) {
                     item.value = { [key]: {} }
                 }
@@ -133,6 +132,20 @@ export default {
                 this.actionName = key
                 this.$nextTick(() => {
                     this.drawer = true
+                })
+                break
+            case 'dialog':
+                if (!item.value) {
+                    item.value = { [key]: {} }
+                }
+                if (!item.value[key]) {
+                    item.value[key] = {}
+                }
+                this.currentActionItem = item
+                this.currentAction = action
+                this.actionName = key
+                this.$nextTick(() => {
+                    this.dialog = true
                 })
                 break
             case 'menu':
@@ -170,27 +183,12 @@ export default {
                 }
                 break
             }
-        },
-        getLabel: function (item) {
-            const decorator = this.decorator
-            let label = decorator.label
-            for (const prop in decorator) {
-                label = label.replace(
-                    ':' + prop,
-                    this.getNestedPathValue(item, decorator[prop])
-                )
-            }
-            return label
         }
     },
     watch: {
-        value: function () {
-            this.devalue = this.value
-        },
         devalue: {
             deep: true,
             handler () {
-                console.log('update', this.value)
                 this.$emit('input', this.devalue)
             }
         }

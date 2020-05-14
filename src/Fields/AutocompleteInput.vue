@@ -8,40 +8,25 @@
     item-value="id"
     hide-details="auto"
     v-bind="fieldProps"
+    v-on="eventHandlers"
   ></v-autocomplete>
 </template>
 
 <script>
+import BaseComponent from './mixins'
 export default {
+    mixins: [BaseComponent],
     name: 'vf-autocomplete-input',
     props: {
         id: String,
         field: Object,
         value: [Array, String]
     },
-    data () {
-        return {
-            devalue: this.value
-        }
-    },
-    computed: {
-        fieldProps: function () {
-            return {
-                ...this.field.props
-            }
-        }
-    },
     watch: {
         devalue: {
             deep: true,
             handler () {
                 this.$emit('input', this.devalue)
-            }
-        },
-        value: {
-            deep: true,
-            handler () {
-                this.devalue = this.value
             }
         }
     }

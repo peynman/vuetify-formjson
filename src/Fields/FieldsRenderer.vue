@@ -1,12 +1,34 @@
 <template>
-  <component :class="`ma-0 pa-0 ${options && options.class ? options.class : ''}`" :is="getRootComponent()" v-bind="getRootComponentProps()">
+  <component :class="`${options && options.formClass ? options.formClass : ''}`" :is="getRootComponent()" v-bind="getRootComponentProps()">
     <component
-      v-for="(field, key) in fields"
-      :ref="key"
-      :key="`${id}-properties-${key}`"
-      :is="getComponentForField(field)"
-      v-model="devalue[key]"
-      v-bind="getComponentPropsForField(field)"
+        v-if="options && options.wrap"
+        :is="options.wrap.component"
+        v-bind="options.wrap.props"
+        :class="options.wrap.class"
+    >
+        <component
+            :is="options.wrap.inside.component"
+            :class="options.wrap.inside.class"
+            v-for="(field, key) in fields"
+            :key="`${id}-properties-${key}`"
+            v-bind="options.wrap.inside.props"
+        >
+            <component
+                :ref="key"
+                :is="getComponentForField(field)"
+                v-model="devalue[key]"
+                v-bind="getComponentPropsForField(field)"
+            ></component>
+        </component>
+    </component>
+    <component
+        v-else
+        :ref="key"
+        v-for="(field, key) in fields"
+        :key="`${id}-properties-${key}`"
+        :is="getComponentForField(field)"
+        v-model="devalue[key]"
+        v-bind="getComponentPropsForField(field)"
     ></component>
   </component>
 </template>
@@ -99,6 +121,8 @@ export default {
                 return `vf-${field.input}-input`
             } else if (field.type === 'group' && field.group) {
                 return `vf-group-${field.group}`
+            } else if (field.type === 'component') {
+                return field.component
             } else if (field.fields) {
                 return 'vf-fields-renderer'
             }

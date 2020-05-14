@@ -38,7 +38,7 @@
     </v-toolbar>
     <v-data-table
       :headers="headers"
-      :items="items"
+      :items="devalue"
       :search="search"
       :expanded.sync="expanded"
       :server-items-length="total"
@@ -51,6 +51,7 @@
       selectable-key
       v-bind="fieldProps"
       @click:row="onToggleItem"
+      v-on="eventHandlers"
     >
       <template v-slot:item.data-table-select="{item, isSelected, select}">
         <v-simple-checkbox class="d-inline" :value="isSelected" @input="select($event)"></v-simple-checkbox>
@@ -88,8 +89,10 @@ import axios from 'axios'
 import VFSettingsDialog from './Datatable/SettingsDialog.vue'
 import VFDeleteDialog from './Datatable/DeleteDialog.vue'
 import VFCreateDialog from './Datatable/CreateDialog.vue'
+import BaseComponent from './mixins'
 
 export default {
+    mixins: [BaseComponent],
     components: {
         [VFSettingsDialog.name]: VFSettingsDialog,
         [VFDeleteDialog.name]: VFDeleteDialog,
@@ -99,45 +102,39 @@ export default {
     props: {
         field: Object,
         id: String,
-        value: Array
-    },
-    data () {
-        return {
-            createModel: {},
-            showAlert: false,
-            showDelete: false,
-            showCreate: false,
-            loading: false,
-            editMode: false,
-            loadingId: 0,
-            search: '',
-            items: [],
-            selected: [],
-            expanded: [],
-            options: {},
-            total: 0,
-            response: null,
-            sortBy: null,
-            sortDesc: null,
-            expandTemplate: null,
-            expandTemplateDefaultMetadata: null,
-            devalue: this.value
+        value: {
+            type: Array,
+            default: () => ([])
         }
     },
+    data: (vm) => ({
+        createModel: {},
+        showAlert: false,
+        showDelete: false,
+        showCreate: false,
+        loading: false,
+        editMode: false,
+        loadingId: 0,
+        search: '',
+        selected: [],
+        expanded: [],
+        options: {},
+        total: vm.value.length,
+        response: null,
+        sortBy: null,
+        sortDesc: null,
+        expandTemplate: null,
+        expandTemplateDefaultMetadata: null
+    }),
     computed: {
-        fieldProps: function () {
-            return {
-                ...this.field.props
-            }
-        },
         headers: function () {
             const headers = []
             if (this.field.columns) {
                 this.field.columns.forEach(h => {
                     if (
                         h.type !== 'template' ||
-            !h.template.params ||
-            h.template.params.header !== false
+                        !h.template.params ||
+                        h.template.params.header !== false
                     ) {
                         headers.push({
                             text: h.title,
@@ -194,10 +191,7 @@ export default {
     },
     methods: {
         updateTable () {
-            this.loading = true
-            this.loadingId += 1
             const sort = []
-
             this.options.sortBy.forEach((s, index) => {
                 sort.push({
                     column: s,
@@ -206,6 +200,8 @@ export default {
             })
 
             if (this.field.table && this.field.table.query) {
+                this.loading = true
+                this.loadingId += 1
                 axios
                     .post(this.field.table.query.url, {
                         ref_id: this.loadingId,
@@ -218,7 +214,8 @@ export default {
                     .then(response => {
                         this.response = response
                         if (response.data.data && this.loadingId <= response.data.ref_id) {
-                            this.updateTableData(response.data)
+                            this.total = response.data.total
+                            this.devalue = response.data.data
                         }
                     })
                     .catch(error => {
@@ -227,14 +224,7 @@ export default {
                     .finally(() => {
                         this.loading = false
                     })
-            } else {
-                this.loading = false
-                this.items = []
             }
-        },
-        updateTableData (paginated) {
-            this.items = paginated.data
-            this.total = paginated.total
         },
         getTemplateSlot (template) {
             if (template.params && template.params.slot) {
@@ -260,28 +250,26 @@ export default {
         onRemoveSelected (item) {
             if (!item) {
                 const self = this
-                this.items = this.items.filter(
+                this.devalue = this.devalue.filter(
                     item => self.selected.filter(s => s.id === item.id).length === 0
                 )
             } else {
-                this.items = this.items.filter(i => i.id !== item.id)
+                this.devalue = this.devalue.filter(i => i.id !== item.id)
             }
             this.selected = []
         },
         onCreateNew () {
-            this.items.unshift({
+            this.devalue.unshift({
                 id: 'id#' + Math.random() * Number.MAX_SAFE_INTEGER,
                 ...this.createModel
             })
             this.showCreate = false
         },
         onUpdateNew () {
-            const self = this
-            console.log(this.items, self.createModel)
-            this.items.forEach((item) => {
-                if (item.id === self.createModel.id) {
-                    for (const prop in self.createModel) {
-                        item[prop] = self.createModel[prop]
+            this.devalue.forEach((item) => {
+                if (item.id === this.createModel.id) {
+                    for (const prop in this.createModel) {
+                        item[prop] = this.createModel[prop]
                     }
                 }
             })
@@ -293,7 +281,6 @@ export default {
             this.editMode = false
         },
         onOpenEditDialog (item) {
-            console.log(item)
             this.createModel = Object.assign({}, item)
             this.editMode = true
             this.showCreate = true
@@ -308,6 +295,13 @@ export default {
         }
     },
     watch: {
+        devalue: {
+            deep: true,
+            handler () {
+                this.$emit('input', this.devalue)
+                this.total = this.devalue.length
+            }
+        },
         showCreate: function () {
             console.log('showcreate d', this.showCreate)
         },
@@ -318,27 +312,6 @@ export default {
             deep: true,
             handler () {
                 this.updateTable()
-            }
-        },
-        devalue: {
-            deep: true,
-            handler () {
-                this.$emit('input', this.devalue)
-            }
-        },
-        value: {
-            deep: true,
-            handler () {
-                this.devalue = this.value
-            }
-        },
-        items: {
-            deep: true,
-            handler () {
-                if (this.field.create) {
-                    this.devalue = [].concat(this.items)
-                    this.total = this.devalue.length
-                }
             }
         },
         selected: {

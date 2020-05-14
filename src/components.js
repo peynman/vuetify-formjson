@@ -1,6 +1,6 @@
 import VuetifyFormJSON from './VuetifyFormJSON.vue'
-import VFFormBuilder from './FormJSONBuilder/FormJSONBuilder.vue'
 
+import VFFormBuilder from './Fields/FormJSONBuilder/FormJSONBuilder.vue'
 import VFTextInput from './Fields/TextInput.vue'
 import VFColorInput from './Fields/ColorInput.vue'
 import VFButtonGroupInput from './Fields/ButtonGroupInput.vue'
@@ -18,6 +18,9 @@ import VFBitwiseFlagsInput from './Fields/BitwiseFlagsInput.vue'
 import VFImageUploadInput from './Fields/ImageUploadInput.vue'
 import VFDatatableInput from './Fields/DatatableInput.vue'
 import VFButtonInput from './Fields/ButtonInput.vue'
+import VFBlocklyInput from './Fields/Blockly/Blockly.vue'
+import VFButtonsListInput from './Fields/ButtonsListInput.vue'
+import VFMarkdownInput from './Fields/MarkdownInput/MarkdownInput.vue'
 
 import VFGroupSingleExpansion from './Fields/GroupSingleExpansion.vue'
 import VFGroupExpansion from './Fields/GroupExpansion.vue'
@@ -43,6 +46,9 @@ export const customComponents = {
     [VFImageUploadInput.name]: VFImageUploadInput,
     [VFDatatableInput.name]: VFDatatableInput,
     [VFButtonInput.name]: VFButtonInput,
+    [VFButtonsListInput.name]: VFButtonsListInput,
+    [VFBlocklyInput.name]: VFBlocklyInput,
+    [VFMarkdownInput.name]: VFMarkdownInput,
 
     [VFGroupExpansion.name]: VFGroupExpansion,
     [VFGroupSingleExpansion.name]: VFGroupSingleExpansion,
@@ -51,14 +57,14 @@ export const customComponents = {
     [VFFormBuilder.name]: VFFormBuilder
 }
 
-const ComponentsObjectList = []
+const FormBuilderInputsList = []
 for (const key in customComponents) {
     if (customComponents[key].name) {
         const parts = customComponents[key].name.split('-')
         if (parts[0] === 'vf') {
             const title = parts.splice(1)
             title[0] = title[0].slice(0, 1).toUpperCase() + title[0].slice(1)
-            ComponentsObjectList.push({
+            FormBuilderInputsList.push({
                 id: customComponents[key].name,
                 title: title.join(' '),
                 editor: customComponents[key].editor
@@ -66,10 +72,15 @@ for (const key in customComponents) {
         }
     }
 }
-ComponentsObjectList.push({
+FormBuilderInputsList.push({
     id: 'group',
     title: 'Group'
 })
+FormBuilderInputsList.push({
+    id: 'component',
+    title: 'Custom Component'
+})
+FormBuilderInputsList.sort((a, b) => ('' + a.title).localeCompare(b.title))
 
 export default {
     install (Vue, options) {
@@ -99,6 +110,9 @@ export default {
     VFImageUploadInput,
     VFDatatableInput,
     VFButtonInput,
+    VFBlocklyInput,
+    VFButtonsListInput,
+    VFMarkdownInput,
 
     VFGroupSingleExpansion,
     VFGroupExpansion,
@@ -106,5 +120,5 @@ export default {
     VFGroupTreeview,
     VFFormBuilder,
 
-    ComponentsObjectList
+    FormBuilderInputsList
 }

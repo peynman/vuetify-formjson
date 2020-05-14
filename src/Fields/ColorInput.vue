@@ -7,6 +7,7 @@
     mask="####"
     v-bind="fieldProps"
     @keyup.native="colorTextChanged($event)"
+    v-on="eventHandlers"
   >
     <template v-slot:prepend-inner>
       <v-menu
@@ -34,9 +35,10 @@
         <v-card>
           <v-card-text class="pa-0">
             <v-color-picker
-              v-bind="pickerProps"
               :value="getColorValue"
               @update:color="colorSelected"
+              v-bind="pickerProps"
+              v-on="pickerProps['v-on'] ? pickerProps['v-on']: {}"
             />
           </v-card-text>
         </v-card>
@@ -46,7 +48,9 @@
 </template>
 
 <script>
+import BaseComponent from './mixins'
 export default {
+    mixins: [BaseComponent],
     name: 'vf-color-input',
     props: {
         id: String,
@@ -55,18 +59,12 @@ export default {
     },
     data () {
         return {
-            colorsMenu: false,
-            devalue: this.value
+            colorsMenu: false
         }
     },
     computed: {
         getColorValue: function () {
             return this.devalue
-        },
-        fieldProps: function () {
-            return {
-                ...this.field.props
-            }
         },
         pickerProps: function () {
             return {
@@ -82,14 +80,6 @@ export default {
             if (this.colorsMenu) {
                 this.devalue = c.hexa
                 this.$emit('input', this.devalue)
-            }
-        }
-    },
-    watch: {
-        value: {
-            deep: true,
-            handler () {
-                this.devalue = this.value
             }
         }
     }

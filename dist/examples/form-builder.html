@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="An example for Vuetify FormJSON; 2 Way binding">
+	<meta name="description" content="An example for Vuetify FormJSON; Form JSON Generator">
 	<meta name="author" content="peynman.net@gmail.com">
 	<title>Vuetify FormJSON - Examples: Showcase</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
@@ -12,7 +12,9 @@
 	<link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/jsoneditor@8.6.4/dist/jsoneditor.min.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="../vuetify-formjson.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive@0.50.7/dist/mathlive.core.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathlive@0.50.7/dist/mathlive.css">
+    <link rel="stylesheet" type="text/css" href="../vuetify-formjson.min.css">
 	<style>
 	.showcase-column {
 		border-right: 4px solid lightgray;
@@ -23,34 +25,33 @@
 	<div id="app">
 		<v-app>
 			<v-content>
-                <v-row class="fill-height">
+                <v-row class="fill-height ma-0">
                     <v-col class="showcase-column" md="7">
-                        <v-tabs>
+                        <v-tabs grow centered>
                             <v-tab href="#form">
                             Form
                             </v-tab>
                             <v-tab-item value="form">
-                                <vuetify-formjson v-bind="formSchema.formjson"></vuetify-formjson>
+                                <vuetify-formjson v-bind="formJSONCompiledModel"></vuetify-formjson>
                             </v-tab-item>
 
-                            <v-tab href="#formschema">
+                            <v-tab href="#formSchemaModel">
                             Form Schema
                             </v-tab>
-                            <v-tab-item value="formschema">
-                            <code class="d-block">{{JSON.stringify(formSchema, null, 2) }}</code>
+                            <v-tab-item value="formSchemaModel">
+                            <code class="d-block">{{JSON.stringify(formSchemaModel, null, 2) }}</code>
                             </v-tab-item>
 
-                            <v-tab href="#builderitems">
+                            <v-tab href="#formSchemaInternalItems">
                             Form Builder Items
                             </v-tab>
-                            <v-tab-item value="builderitems">
-                            <code class="d-block">{{JSON.stringify(builderItems, (k, v) => (k !== 'parent' ? v : undefined), 2) }}</code>
+                            <v-tab-item value="formSchemaInternalItems">
+                            <code class="d-block">{{JSON.stringify(formSchemaInternalItems, (k, v) => (k !== 'parent' ? v : undefined), 2) }}</code>
                             </v-tab-item>
-
                         </v-tabs>
                     </v-col>
                     <v-col md="5">
-                        <vuetify-formjson-builder :schema.sync="builderItems" :inputs="inputs" v-model="formSchema"></vuetify-formjson-builder>
+                        <vf-formjson-input ref="jsonEditor" :field="formJSONBuilderFieldDefinition" :schema.sync="formSchemaInternalItems" v-model="formSchemaModel"></vf-formjson-input>
                     </v-col>
                 </v-row>
 			</v-content>
@@ -64,20 +65,50 @@
 	<script src="https://unpkg.com/vuetify-image-input"></script>
 	<script src="https://cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tree-model@1.0.7/dist/TreeModel-min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/blockly@3.20200402.1/blockly.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@10.0.0/dist/markdown-it.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.5.0/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathlive@0.50.7/dist/mathlive.js"></script>
 	<script src="../vuetify-formjson.min.js"></script>
 	<script>
-        const inputs = VuetifyFormJSON.default.Components.ComponentsObjectList
+        const AvailableInputTypes = VuetifyFormJSON.default.Components.FormBuilderInputsList
+
 		var app = new Vue({
 			el: '#app',
 			vuetify: new Vuetify(),
+            computed: {
+            },
             data() {
                 return {
-                    builderOutput: {},
-                    formSchema: {
-                        formjson: {}
-                    },
-                    builderItems: {},
-                    inputs
+                    inputs: AvailableInputTypes,
+                    formSchemaModel: {},
+                    formSchemaInternalItems: {},
+                    formJSONCompiledModel: {},
+                    formJSONBuilderFieldDefinition: {
+                        label: 'Create Form Schema',
+                        inputs: AvailableInputTypes
+                    }
+                }
+            },
+            watch: {
+                formSchemaModel: {
+                    deep: true,
+                    handler () {
+                        try {
+                            const compiledForm = this.$refs.jsonEditor.CompileFormJSONSchemaWithCode(
+                                this,
+                                this.formSchemaModel,
+                                {}
+                            )
+                            this.formJSONCompiledModel = {
+                                fields: compiledForm.formjson.fields,
+                                id: 'exampleFormOutput',
+                                options: compiledForm.formjson.options
+                            }
+                        } catch (e) {
+
+                        }
+                    }
                 }
             }
 		})

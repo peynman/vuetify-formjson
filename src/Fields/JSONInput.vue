@@ -41,8 +41,10 @@
 
 <script>
 import JSONEditor from 'jsoneditor'
+import BaseComponent from './mixins'
 
 export default {
+    mixins: [BaseComponent],
     name: 'vf-json-input',
     props: {
         id: String,
@@ -55,8 +57,23 @@ export default {
                 mode: 'code'
             },
             editor: null,
-            ignoreUpdate: false,
-            devalue: this.value
+            ignoreUpdate: false
+        }
+    },
+    methods: {
+        setMode: function (mode) {
+            this.options.mode = mode
+            this.editor.setMode(mode)
+        }
+    },
+    watch: {
+        devalue: {
+            deep: true,
+            handler () {
+                const pos = this.editor.getTextSelection()
+                this.editor.set(this.devalue)
+                this.editor.setTextSelection(pos.start, pos.end)
+            }
         }
     },
     mounted: function () {
@@ -85,28 +102,6 @@ export default {
             } else {
                 this.editor.set({})
             }
-        }
-    },
-    watch: {
-        devalue: {
-            deep: true,
-            handler () {
-                const pos = this.editor.getTextSelection()
-                this.editor.set(this.devalue)
-                this.editor.setTextSelection(pos.start, pos.end)
-            }
-        },
-        value: {
-            deep: true,
-            handler () {
-                this.devalue = this.value
-            }
-        }
-    },
-    methods: {
-        setMode: function (mode) {
-            this.options.mode = mode
-            this.editor.setMode(mode)
         }
     }
 }

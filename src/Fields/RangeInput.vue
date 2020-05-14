@@ -7,41 +7,25 @@
     hide-details="auto"
     v-bind="fieldProps"
     @change="updateInput"
+    v-on="eventHandlers"
   >
   </v-slider>
 </template>
 
 <script>
+import BaseComponent from './mixins'
+
 export default {
+    mixins: [BaseComponent],
     name: 'vf-range-input',
     props: {
         id: String,
         field: Object,
         value: Number
     },
-    data () {
-        return {
-            devalue: this.value
-        }
-    },
-    computed: {
-        fieldProps: function () {
-            return {
-                ...this.field.props
-            }
-        }
-    },
     methods: {
         updateInput: function () {
             this.$emit('input', this.devalue)
-        }
-    },
-    watch: {
-        value: {
-            deep: true,
-            handler () {
-                this.devalue = this.value
-            }
         }
     }
 }

@@ -24,7 +24,12 @@ const globals = {
     'vuetify-image-input': 'VuetifyImageInput',
     axios: 'axios',
     'vuetify/lib': 'Vuetify',
-    'tree-model': 'TreeModel'
+    'tree-model': 'TreeModel',
+    blockly: 'Blockly',
+    vuetifyMarkdownEditor: 'Editor',
+    'markdown-it': 'markdownit',
+    mathlive: 'MathLive',
+    mermaid: 'mermaid'
 }
 const outputs = [{
     name: 'VuetifyFormJSON',
@@ -57,7 +62,11 @@ export default [{
         'axios',
         'jsoneditor',
         'vuetify/lib',
-        'tree-model'
+        'tree-model',
+        'blockly',
+        'markdown-it',
+        'mermaid',
+        'mathlive'
     ],
     input: 'src/index.js',
     output: outputs,

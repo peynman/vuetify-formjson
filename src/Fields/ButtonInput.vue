@@ -1,33 +1,23 @@
 <template>
   <v-btn
     :class="`vf-input vf-btn ${field.class ? field.class:''}`"
-    v-bind="fieldProps"
     @click="onButtonClick"
+    v-bind="fieldProps"
+    v-on="eventHandlers"
   >
     <span v-if="field.label">{{ field.label }}</span>
-    <v-icon v-if="field.icon" v-bind="fieldIconProps">{{ field.icon }}</v-icon>
+    <v-icon v-if="field.icon" v-bind="field.iconProps">{{ field.icon }}</v-icon>
   </v-btn>
 </template>
 
 <script>
+import BaseComponent from './mixins'
 export default {
+    mixins: [BaseComponent],
     name: 'vf-button-input',
     props: {
         id: String,
         field: Object
-    },
-    computed: {
-        fieldProps: function () {
-            return {
-                ...this.field.props
-            }
-        },
-        fieldIconProps: function () {
-            return {
-                ...this.field.props,
-                ...this.field.iconProps
-            }
-        }
     },
     methods: {
         onButtonClick: function (e) {

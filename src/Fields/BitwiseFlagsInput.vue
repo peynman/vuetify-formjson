@@ -3,7 +3,9 @@
 </template>
 
 <script>
+import BaseComponent from './mixins'
 export default {
+    mixins: [BaseComponent],
     name: 'vf-bitwise-flags-input',
     props: {
         id: String,
@@ -12,8 +14,7 @@ export default {
     },
     data () {
         return {
-            innerValue: {},
-            devalue: this.value
+            innerValue: {}
         }
     },
     watch: {
@@ -25,12 +26,6 @@ export default {
                 }
             })
             this.innerValue = newInner
-        },
-        value: {
-            deep: true,
-            handler () {
-                this.devalue = this.value
-            }
         },
         innerValue: {
             deep: true,

@@ -10,39 +10,29 @@
     item-text="title"
     item-value="id"
     v-bind="fieldProps"
+    v-on="eventHandlers"
   >
+    <template v-slot:item="{item}">
+        <v-label>{{ getDecorableLabel(item) }}</v-label>
+        <v-subheader v-if="decorator.subheader">{{ getDecorableProperty(item, 'subheader') }}</v-subheader>
+    </template>
   </v-select>
 </template>
 
 <script>
+import BaseComponent, { DecoratableComponent } from './mixins'
+
 export default {
+    mixins: [BaseComponent, DecoratableComponent],
     name: 'vf-select-input',
     props: {
         field: Object,
         id: String,
         value: [Array, String]
     },
-    data () {
-        return {
-            devalue: this.value
-        }
-    },
-    computed: {
-        fieldProps: function () {
-            return {
-                ...this.field.props
-            }
-        }
-    },
     watch: {
         devalue: function () {
             this.$emit('input', this.devalue)
-        },
-        value: {
-            deep: true,
-            handler () {
-                this.devalue = this.value
-            }
         }
     }
 }
