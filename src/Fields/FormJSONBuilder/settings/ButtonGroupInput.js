@@ -8,6 +8,10 @@ import {
 import api from './../api'
 
 export default class ButtonGroupInputSettings extends BaseInputSettings {
+    getInputSlots () {
+        return []
+    }
+
     getInputEventGroupsList () {
         return [
             {

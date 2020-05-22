@@ -1,12 +1,10 @@
 import {
     CommonInputEssentials,
-    MessagesTab,
-    BaseInputSettings
+    BaseInputSettings,
+    CheckboxSettings
 } from './comon'
 
-import api from './../api'
-
-export default class RadioGroupInputSettings extends BaseInputSettings {
+export default class AutocompleteInputSettings extends BaseInputSettings {
     getInputSlots () {
         return []
     }
@@ -16,7 +14,12 @@ export default class RadioGroupInputSettings extends BaseInputSettings {
             {
                 id: 'props',
                 title: 'Component events',
-                events: api.VRadioGroup.events
+                events: [
+                    {
+                        id: 'input',
+                        title: 'Triggerred when Input value is changed'
+                    }
+                ]
             }
         ]
     }
@@ -24,14 +27,13 @@ export default class RadioGroupInputSettings extends BaseInputSettings {
     getInputProperties () {
         return {
             ...CommonInputEssentials,
+            readonly: CheckboxSettings('Readonly', 'removes editor buttons from paragraph input and display in view mode'),
             props: {
                 options: {
                     type: 'row',
                     formClass: 'ma-0 pa-0'
                 },
                 fields: {
-                    ...api.VRadioGroup.fields,
-                    messages: MessagesTab
                 }
             }
         }

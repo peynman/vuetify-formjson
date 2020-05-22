@@ -76,6 +76,8 @@
         "markdown-it": "^10.0.0",
         "mathlive": "^0.50.7",
         "mermaid": "^8.5.0",
+        "moment": "^2.26.0",
+        "moment-timezone": "^0.5.31",
         "tree-model": "^1.0.7",
         "vue": "^2.6.11",
         "vue-axios": "^2.1.5",

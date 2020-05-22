@@ -8,6 +8,10 @@ import {
 } from './comon'
 
 export default class ImageUploadInputSettings extends BaseInputSettings {
+    getInputSlots () {
+        return []
+    }
+
     getInputEventGroupsList () {
         return []
     }

@@ -7,9 +7,9 @@
     hide-details="auto"
     @keyup.native="updateInput($event)"
     v-on="eventHandlers"
-  ></v-text-field>
+  >
+  </v-text-field>
 </template>
-
 <script>
 import BaseComponent from './mixins'
 

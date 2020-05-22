@@ -20,11 +20,11 @@ export default function (Blockly) {
                     ['Raw', 'text']
                 ]), 'content_type')
             this.appendValueInput('data')
-                .setCheck('String')
+                .setCheck(['String', 'Array', 'Object'])
                 .setAlign(Blockly.ALIGN_RIGHT)
                 .appendField('and data')
             this.appendValueInput('headers')
-                .setCheck('String')
+                .setCheck('Object')
                 .setAlign(Blockly.ALIGN_RIGHT)
                 .appendField('headers')
             this.appendStatementInput('onResponse')
@@ -40,31 +40,16 @@ export default function (Blockly) {
             this.setHelpUrl('')
         }
     }
-
     Blockly.JavaScript.web_request = function (block) {
         const valueUrl = Blockly.JavaScript.valueToCode(block, 'url', Blockly.JavaScript.ORDER_ATOMIC)
         const dropdownMethod = block.getFieldValue('method')
-        const dropdownContentType = block.getFieldValue('content_type')
+        // const dropdownContentType = block.getFieldValue('content_type')
         const valueData = Blockly.JavaScript.valueToCode(block, 'data', Blockly.JavaScript.ORDER_ATOMIC)
-        const valueHeaders = Blockly.JavaScript.valueToCode(block, 'headers', Blockly.JavaScript.ORDER_ATOMIC)
-        // const variableResponse = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('response'), Blockly.Variables.NAME_TYPE)
-        // const statementsOnResponse = Blockly.JavaScript.statementToCode(block, 'onResponse')
-        // TODO: Assemble JavaScript into code variable.
-        const axiosParams = {
-            url: valueUrl.replace(/'/g, ''),
-            method: dropdownMethod,
-            headers: {
-                ...valueHeaders
-            }
-        }
-        if (valueData) {
-            axiosParams.data = valueData
-        }
-        if (dropdownContentType) {
-            axiosParams.headers['Content-Type'] = dropdownContentType
-        }
+        // const valueHeaders = Blockly.JavaScript.valueToCode(block, 'headers', Blockly.JavaScript.ORDER_ATOMIC)
+        const variableResponse = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('response'), Blockly.Variables.NAME_TYPE)
         const innerCode = Blockly.JavaScript.statementToCode(block, 'onResponse')
-        var code = `axios(${JSON.stringify(axiosParams, null, 2)}).then(() => {${innerCode}});\n`
+        // TODO: Assemble JavaScript into code variable.
+        var code = `this.webRequest({\nurl: ${valueUrl},\nmethod: '${dropdownMethod}',\nheaders: {},\ndata: ${valueData},\n}).then((response) => {\n  this.blockly.${variableResponse} = response;\n ${innerCode}\n}).catch((err) => {\n this.blockly.${variableResponse} = err;\n ${innerCode}\n});`
         return code
     }
 
@@ -83,13 +68,10 @@ export default function (Blockly) {
             this.setHelpUrl('')
         }
     }
-
     Blockly.JavaScript.web_is_response_code = function (block) {
         var variableName = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('var_name'), Blockly.Variables.NAME_TYPE)
         var valueCode = Blockly.JavaScript.valueToCode(block, 'code', Blockly.JavaScript.ORDER_ATOMIC)
-        // TODO: Assemble JavaScript into code variable.
-        var code = 'this.' + variableName + '.status === ' + valueCode
-        // TODO: Change ORDER_NONE to the correct strength.
+        var code = 'this.blockly.' + variableName + '.status === ' + valueCode
         return [code, Blockly.JavaScript.ORDER_NONE]
     }
 
@@ -106,13 +88,9 @@ export default function (Blockly) {
             this.setHelpUrl('')
         }
     }
-
     Blockly.JavaScript.web_is_response_ok = function (block) {
         var variableName = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('var_name'), Blockly.Variables.NAME_TYPE)
-        var valueCode = Blockly.JavaScript.valueToCode(block, 'code', Blockly.JavaScript.ORDER_ATOMIC)
-        // TODO: Assemble JavaScript into code variable.
-        var code = 'this.' + variableName + '.status === ' + valueCode
-        // TODO: Change ORDER_NONE to the correct strength.
+        var code = 'this.blockly.' + variableName + '.status === 200'
         return [code, Blockly.JavaScript.ORDER_NONE]
     }
 }

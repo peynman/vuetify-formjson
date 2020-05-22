@@ -1,7 +1,10 @@
 export class BaseInputSettings {
-    getInputPropsFromFromSettings (settings) {
-        let inputProperties = getNestedPathValue(settings, 'tabs.fieldProperties')
+    getInputPropsFromSettings (settings) {
+        // grab a copy of field properties in this fields settings
+        let inputProperties = { ...getNestedPathValue(settings, 'tabs.fieldProperties') }
+        // find events too
         const inputEventGroups = getNestedPathValue(settings, 'tabs.eventHandlers')
+        // add all events to outputed properties
         if (inputEventGroups) {
             if (!inputProperties) {
                 inputProperties = {}
@@ -24,7 +27,11 @@ export class BaseInputSettings {
     }
 
     getSettingsFormFields () {
-        return createSettingsFrom(this.getInputProperties(), this.getInputEventGroupsList())
+        return createSettingsFrom(
+            this.getInputProperties(),
+            this.getInputEventGroupsList(),
+            this.getInputSlots()
+        )
     }
 }
 
@@ -54,6 +61,18 @@ export function TextSettings (label) {
         input: 'text',
         class: 'col-12 mx-0 px-0',
         label
+    }
+}
+
+export function CheckboxSettings (label, hint = undefined) {
+    return {
+        type: 'input',
+        input: 'checkbox',
+        class: 'col-12 mx-0 px-0',
+        label,
+        props: {
+            hint
+        }
     }
 }
 
@@ -129,7 +148,7 @@ export function createEventsDatatableInputForSettingsForm (title, events) {
     }
 }
 
-export function createSettingsFrom (fields, events) {
+export function createSettingsFrom (fields, events, slots) {
     const eventFields = {}
     events.forEach((eg) => {
         eventFields[eg.id] = createEventsDatatableInputForSettingsForm(eg.title, eg.events)
@@ -146,7 +165,7 @@ export function createSettingsFrom (fields, events) {
                         type: 'row',
                         formClass: 'ma-0 pa-0'
                     },
-                    fields: fields
+                    fields
                 },
                 eventHandlers: {
                     label: 'Events',
@@ -203,131 +222,6 @@ export const CommonInputEssentials = {
         input: 'text',
         label: 'Class',
         class: 'col-12 ma-0 ps-0 pe-0'
-    }
-}
-
-export const CommonInputDecorates = {
-    color: {
-        type: 'input',
-        input: 'color',
-        label: 'Color',
-        class: 'col-6 ma-0 ps-0 pe-0'
-    },
-    'background-color': {
-        type: 'input',
-        input: 'color',
-        label: 'Background Color',
-        class: 'col-6 ma-0 ps-0 pe-0'
-    },
-    hint: {
-        type: 'input',
-        input: 'text',
-        label: 'Hint',
-        class: 'col-12 ma-0 ps-0 pe-0'
-    },
-    placeholder: {
-        type: 'input',
-        input: 'text',
-        label: 'Placeholder',
-        class: 'col-12 ma-0 ps-0 pe-0'
-    },
-    height: {
-        type: 'input',
-        input: 'text',
-        label: 'Placeholder',
-        class: 'col-12 ma-0 ps-0 pe-0'
-    }
-}
-
-export const TextInputIconProps = {
-    prefix: {
-        type: 'input',
-        input: 'text',
-        class: 'col-4 ma-0 pa-0',
-        label: 'Prefix'
-    },
-    suffix: {
-        type: 'input',
-        input: 'text',
-        class: 'col-4 ma-0 pa-0',
-        label: 'Suffix'
-    },
-    'append-icon': {
-        type: 'input',
-        input: 'text',
-        class: 'col-4 ma-0 pa-0',
-        label: 'Append icon'
-    },
-    'append-outer-icon': {
-        type: 'input',
-        input: 'text',
-        label: 'Append outer icon'
-    },
-    'prepend-icon': {
-        type: 'input',
-        input: 'text',
-        label: 'Prepend icon'
-    },
-    'prepend-inner-icon': {
-        type: 'input',
-        input: 'text',
-        label: 'Prepend inner icon'
-    },
-    'clear-icon': {
-        type: 'input',
-        input: 'text',
-        label: 'Clear icon'
-    }
-}
-
-export const TextInputDisplayProps = {
-    'full-width': {
-        type: 'input',
-        input: 'switch',
-        class: 'col-4 ma-0 pe-0 ps-0',
-        label: 'Full width'
-    },
-    rounded: {
-        type: 'input',
-        input: 'switch',
-        class: 'col-4 ma-0 pe-0 ps-0',
-        label: 'Rounded'
-    },
-    filled: {
-        type: 'input',
-        input: 'switch',
-        class: 'col-4 ma-0 pe-0 ps-0',
-        label: 'Filled'
-    },
-    outlined: {
-        type: 'input',
-        input: 'switch',
-        class: 'col-4 ma-0 pe-0 ps-0',
-        label: 'Outlined'
-    },
-    shaped: {
-        type: 'input',
-        input: 'switch',
-        class: 'col-4 ma-0 pe-0 ps-0',
-        label: 'Shaped'
-    },
-    solo: {
-        type: 'input',
-        input: 'switch',
-        class: 'col-4 ma-0 pe-0 ps-0',
-        label: 'Solo'
-    },
-    'solo-inverted': {
-        type: 'input',
-        input: 'switch',
-        class: 'col-4 ma-0 pe-0 ps-0',
-        label: 'Solo inverted'
-    },
-    reverse: {
-        type: 'input',
-        input: 'switch',
-        class: 'col-4 ma-0 pe-0 ps-0',
-        label: 'Reverse'
     }
 }
 
@@ -434,91 +328,5 @@ export const MessagesTab = {
                 }
             }
         }
-    }
-}
-
-export const CommonInputProps = {
-    'loader-height': {
-        type: 'input',
-        input: 'text',
-        class: 'col-6 ps-0 pe-0',
-        label: 'Loader indicator height'
-    },
-    'hide-details': {
-        type: 'input',
-        input: 'select',
-        class: 'col-6 ps-0 pe-0',
-        objects: [
-            {
-                id: 'auto',
-                title: 'Auto'
-            },
-            {
-                id: true,
-                title: 'True'
-            },
-            {
-                id: false,
-                title: 'False'
-            }
-        ],
-        decorator: {
-            label: ':title'
-        },
-        label: 'Hide details'
-    },
-    loading: {
-        type: 'input',
-        input: 'switch',
-        class: 'col-4 ma-0 pe-0 ps-0',
-        label: 'Loading'
-    },
-    readonly: {
-        type: 'input',
-        input: 'switch',
-        class: 'col-4 ma-0 pe-0 ps-0',
-        label: 'Readonly'
-    },
-    light: {
-        type: 'input',
-        input: 'switch',
-        class: 'col-4 ma-0 pe-0 ps-0',
-        label: 'Light'
-    },
-    dark: {
-        type: 'input',
-        input: 'switch',
-        class: 'col-4 ma-0 pe-0 ps-0',
-        label: 'Dark'
-    },
-    clearable: {
-        type: 'input',
-        input: 'switch',
-        class: 'col-4 ma-0 pe-0 ps-0',
-        label: 'Clearable'
-    },
-    disabled: {
-        type: 'input',
-        input: 'switch',
-        class: 'col-4 ma-0 pe-0 ps-0',
-        label: 'Disabled'
-    },
-    'persistent-hint': {
-        type: 'input',
-        input: 'switch',
-        class: 'col-4 ma-0 pe-0 ps-0',
-        label: 'Persistent hint'
-    },
-    error: {
-        type: 'input',
-        input: 'switch',
-        class: 'col-4 ma-0 pe-0 ps-0',
-        label: 'Error'
-    },
-    success: {
-        type: 'input',
-        input: 'switch',
-        class: 'col-4 ma-0 pe-0 ps-0',
-        label: 'Success'
     }
 }

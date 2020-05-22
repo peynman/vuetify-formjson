@@ -1,32 +1,29 @@
 import RegisterBlocksAndGetToolbox from './toolbox'
 
-export default function GeneratVueJSObject (Blockly, codeDom, blocks) {
+export function GenerateJSCode (Blockly, codeDom, blocks) {
     const toolbox = RegisterBlocksAndGetToolbox(Blockly, {
     })
-    /// update variables to act in a object scope
+    const oldInit = Blockly.JavaScript.init
+    Blockly.JavaScript.variableDB_ = new Blockly.Names(Blockly.JavaScript.RESERVED_WORDS_)
+
     Blockly.JavaScript.variables_get = function (block) {
-        // Variable getter.
+    // Variable getter.
         var code = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('VAR'),
             Blockly.VARIABLE_CATEGORY_NAME)
-        return ['this.' + code, Blockly.JavaScript.ORDER_ATOMIC]
+        return ['this.blockly.' + code, Blockly.JavaScript.ORDER_ATOMIC]
     }
+
     Blockly.JavaScript.variables_set = function (block) {
-        // Variable setter.
+    // Variable setter.
         var argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
             Blockly.JavaScript.ORDER_ASSIGNMENT) || '0'
         var varName = Blockly.JavaScript.variableDB_.getName(
             block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME)
-        return 'this.' + varName + ' = ' + argument0 + ';\n'
-    }
-    const oldInit = Blockly.JavaScript.init
-    Blockly.JavaScript.init = function (workspace) {
-        oldInit(workspace)
-        Blockly.JavaScript.definitions_.variables = '' // in object space we need no decleration for varaibles
+        return 'this.blockly.' + varName + ' = ' + argument0 + ';\n'
     }
 
-    /// update procedures to act in a object scope
     Blockly.JavaScript.procedures_defreturn = function (block) {
-        // Define a procedure with a return value.
+    // Define a procedure with a return value.
         var funcName = Blockly.JavaScript.variableDB_.getName(
             block.getFieldValue('NAME'), Blockly.PROCEDURE_CATEGORY_NAME)
         var xfix1 = ''
@@ -63,21 +60,21 @@ export default function GeneratVueJSObject (Blockly, codeDom, blocks) {
             args[i] = Blockly.JavaScript.variableDB_.getName(block.arguments_[i],
                 Blockly.VARIABLE_CATEGORY_NAME)
         }
-        var code = funcName + '(' + args.join(', ') + ') {\n' +
-            xfix1 + loopTrap + branch + xfix2 + returnValue + '}'
+        const varSets = []
+        args.forEach((v) => {
+            varSets.push('  this.blockly.' + v + ' = ' + v + ';\n')
+        })
+        var code = funcName + ': function (' + args.join(', ') + ') {\n' +
+        varSets.join('') + xfix1 + loopTrap + branch + xfix2 + returnValue + '},'
         code = Blockly.JavaScript.scrub_(block, code)
         // Add % so as not to collide with helper functions in definitions list.
         Blockly.JavaScript.definitions_['%' + funcName] = code
         return null
     }
-
-    // Defining a procedure without a return value uses the same generator as
-    // a procedure with a return value.
-    Blockly.JavaScript.procedures_defnoreturn =
-        Blockly.JavaScript.procedures_defreturn
+    Blockly.JavaScript.procedures_defnoreturn = Blockly.JavaScript.procedures_defreturn
 
     Blockly.JavaScript.procedures_callreturn = function (block) {
-        // Call a procedure with a return value.
+    // Call a procedure with a return value.
         var funcName = Blockly.JavaScript.variableDB_.getName(
             block.getFieldValue('NAME'), Blockly.PROCEDURE_CATEGORY_NAME)
         var args = []
@@ -88,43 +85,24 @@ export default function GeneratVueJSObject (Blockly, codeDom, blocks) {
         var code = 'this.' + funcName + '(' + args.join(', ') + ')'
         return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL]
     }
-
-    Blockly.JavaScript.procedures_callnoreturn = function (block) {
-        // Call a procedure with no return value.
-        // Generated code is for a function call as a statement is the same as a
-        // function call as a value, with the addition of line ending.
-        var tuple = Blockly.JavaScript.procedures_callreturn(block)
-        return tuple[0] + ';\n'
+    Blockly.JavaScript.init = function (workspace) {
+        oldInit(workspace)
+        Blockly.JavaScript.definitions_.variables = `blockly: {${Object.keys(Blockly.JavaScript.variableDB_.db_).map((i) => i.split('_')[0] + ': null').join(',')}},`
     }
 
-    Blockly.JavaScript.procedures_ifreturn = function (block) {
-        // Conditionally return value from a procedure.
-        var condition = Blockly.JavaScript.valueToCode(block, 'CONDITION',
-            Blockly.JavaScript.ORDER_NONE) || 'false'
-        var code = 'if (' + condition + ') {\n'
-        if (Blockly.JavaScript.STATEMENT_SUFFIX) {
-            // Inject any statement suffix here since the regular one at the end
-            // will not get executed if the return is triggered.
-            code += Blockly.JavaScript.prefixLines(
-                Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_SUFFIX, block),
-                Blockly.JavaScript.INDENT)
-        }
-        if (block.hasReturnValue_) {
-            var value = Blockly.JavaScript.valueToCode(block, 'VALUE',
-                Blockly.JavaScript.ORDER_NONE) || 'null'
-            code += Blockly.JavaScript.INDENT + 'return ' + value + ';\n'
-        } else {
-            code += Blockly.JavaScript.INDENT + 'return;\n'
-        }
-        code += '}\n'
-        return code
-    }
     const workspace = new Blockly.Workspace({
         toolbox
     })
+    if (typeof codeDom !== 'string' || codeDom.length === 0) {
+        codeDom = '<xml xmlns="https://developers.google.com/blockly/xml"></xml>'
+    }
     const dom = Blockly.Xml.textToDom(codeDom)
     Blockly.Xml.appendDomToWorkspace(dom, workspace)
     const code = Blockly.JavaScript.workspaceToCode(workspace)
+    return `({\n${code}\n})`
+}
+
+export default function GeneratVueJSObject (Blockly, codeDom, blocks) {
     // eslint-disable-next-line no-eval
-    return eval('({' + code + '})')
+    return eval(GenerateJSCode(Blockly, codeDom, blocks))
 }

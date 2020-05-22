@@ -7,6 +7,10 @@ import {
 import api from './../api'
 
 export default class GroupTabsSettings extends BaseInputSettings {
+    getInputSlots () {
+        return []
+    }
+
     getInputEventGroupsList () {
         return [
             {

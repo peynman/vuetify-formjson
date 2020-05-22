@@ -20,7 +20,7 @@ export default {
     props: {
         id: String,
         field: Object,
-        value: Object
+        value: [Object, Boolean]
     },
     methods: {
         updateInput: function () {

@@ -1,14 +1,18 @@
 import {
-    CommonInputEssentials,
     BaseInputSettings,
-    TextSettings
+    TextSettings,
+    CheckboxSettings
 } from './comon'
 
 export default class FieldsRenderSettings extends BaseInputSettings {
+    getInputSlots () {
+        return []
+    }
+
     getInputEventGroupsList () {
         return [
             {
-                id: 'props',
+                id: 'options',
                 title: 'Component events',
                 events: [
                     {
@@ -41,6 +45,7 @@ export default class FieldsRenderSettings extends BaseInputSettings {
                     formClass: 'ma-0 pa-0'
                 },
                 fields: {
+                    formClass: TextSettings('Form Class'),
                     type: {
                         type: 'input',
                         input: 'select',
@@ -65,8 +70,28 @@ export default class FieldsRenderSettings extends BaseInputSettings {
                             label: ':title'
                         }
                     },
-                    formClass: TextSettings('Form Class'),
-                    component: TextSettings('Component')
+                    component: TextSettings('Component'),
+                    wrap: {
+                        options: {
+                            type: 'col',
+                            formClass: 'ma-0 pa-0'
+                        },
+                        fields: {
+                            enabled: CheckboxSettings('User Wrapper'),
+                            class: TextSettings('Wrapper Class'),
+                            component: TextSettings('Wrapper Component'),
+                            inside: {
+                                options: {
+                                    type: 'col',
+                                    formClass: 'ma-0 pa-0'
+                                },
+                                fields: {
+                                    class: TextSettings('Wrapper inside Class'),
+                                    component: TextSettings('Wrapper inside Component')
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

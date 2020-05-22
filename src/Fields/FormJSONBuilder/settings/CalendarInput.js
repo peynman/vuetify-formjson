@@ -6,19 +6,13 @@ import {
 
 import api from './../api'
 
-export default class RadioGroupInputSettings extends BaseInputSettings {
+export default class ColorInputSettings extends BaseInputSettings {
     getInputSlots () {
         return []
     }
 
     getInputEventGroupsList () {
-        return [
-            {
-                id: 'props',
-                title: 'Component events',
-                events: api.VRadioGroup.events
-            }
-        ]
+        return []
     }
 
     getInputProperties () {
@@ -30,7 +24,6 @@ export default class RadioGroupInputSettings extends BaseInputSettings {
                     formClass: 'ma-0 pa-0'
                 },
                 fields: {
-                    ...api.VRadioGroup.fields,
                     messages: MessagesTab
                 }
             }

@@ -18,7 +18,7 @@ export default {
     props: {
         id: String,
         field: Object,
-        value: Object
+        value: [String, Array, Object]
     },
     data () {
         return {
@@ -47,6 +47,13 @@ export default {
         },
         refreshSize () {
             this.onWindowResize(null)
+        },
+        updateBlocks () {
+            if (this.value && this.value !== '') {
+                try {
+                    Blockly.Xml.clearWorkspaceAndLoadFromXml(Blockly.Xml.textToDom(this.value), this.blockEditor)
+                } catch (e) {}
+            }
         }
     },
     mounted () {

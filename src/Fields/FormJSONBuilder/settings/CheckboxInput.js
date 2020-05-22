@@ -7,6 +7,10 @@ import {
 import api from './../api'
 
 export default class ColorInputSettings extends BaseInputSettings {
+    getInputSlots () {
+        return []
+    }
+
     getInputEventGroupsList () {
         return [
             {

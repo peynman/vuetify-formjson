@@ -1,15 +1,11 @@
 import RegisterWebBlocks, { CategoryWeb } from './blocks/web'
 import RegisterAPIBlocks, { CategoryAPI } from './blocks/api'
-import RegisterVuexBlocks, { CategoryVuex } from './blocks/vuex'
+import RegisterAppBlocks, { CategoryApp } from './blocks/app'
 import RegisterObjectBlocks, { CategoryObject } from './blocks/object'
 
 export default function RegisterBlocksAndGetToolbox (Blockly, options) {
     const categoriesList = []
     const blocks = {
-        vuex: function () {
-            RegisterVuexBlocks(Blockly)
-            categoriesList.push(CategoryVuex)
-        },
         web: function () {
             RegisterWebBlocks(Blockly)
             categoriesList.push(CategoryWeb)
@@ -18,21 +14,25 @@ export default function RegisterBlocksAndGetToolbox (Blockly, options) {
             RegisterAPIBlocks(Blockly, options && options.crud && options.crud.resources ? options.crud.resources : [['users', 'Users'], ['domains', 'Domains']])
             categoriesList.push(CategoryAPI)
         },
-        object: function () {
-            RegisterObjectBlocks(Blockly)
-            categoriesList.push(CategoryObject)
+        app: function () {
+            RegisterAppBlocks(Blockly)
+            categoriesList.push(CategoryApp)
         },
         text: function () {
             categoriesList.push(CategoryText)
         },
-        color: function () {
-            categoriesList.push(CategoryColor)
+        object: function () {
+            RegisterObjectBlocks(Blockly)
+            categoriesList.push(CategoryObject)
+        },
+        lists: function () {
+            categoriesList.push(CategoryLists)
         },
         math: function () {
             categoriesList.push(CategoryMath)
         },
-        lists: function () {
-            categoriesList.push(CategoryLists)
+        color: function () {
+            categoriesList.push(CategoryColor)
         },
         sep: function () {
             categoriesList.push('<sep></sep>')

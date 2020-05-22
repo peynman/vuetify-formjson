@@ -1,9 +1,12 @@
 import {
-    CommonInputEssentials,
     BaseInputSettings
 } from './comon'
 
 export default class GroupExpansionSettings extends BaseInputSettings {
+    getInputSlots () {
+        return []
+    }
+
     getInputEventGroupsList () {
         return []
     }

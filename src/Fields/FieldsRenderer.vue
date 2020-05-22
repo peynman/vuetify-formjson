@@ -1,7 +1,7 @@
 <template>
   <component :class="`${options && options.formClass ? options.formClass : ''}`" :is="getRootComponent()" v-bind="getRootComponentProps()">
     <component
-        v-if="options && options.wrap"
+        v-if="options && options.wrap && options.wrap.enabled !== false"
         :is="options.wrap.component"
         v-bind="options.wrap.props"
         :class="options.wrap.class"
@@ -57,6 +57,9 @@ export default {
             handler: function () {
                 if (this.onUpdated) {
                     this.onUpdated(this.devalue)
+                }
+                if (this.options && this.options['v-on'] && this.options['v-on'].input) {
+                    this.options['v-on'].input(this.devalue)
                 }
                 this.$emit('input', this.devalue)
             }

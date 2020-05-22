@@ -79,15 +79,48 @@ export const EasyNestedObject = {
                 }
             })
         },
+        appendNestedPathValue: function (obj, path, val) {
+            const parts = path.split('.')
+            parts.forEach((p, indexer) => {
+                if (indexer === parts.length - 1) {
+                    if (obj[p]) {
+                        Object.assign(obj[p], val)
+                    } else {
+                        obj[p] = val
+                    }
+                } else {
+                    if (!obj[p]) {
+                        obj[p] = {}
+                    }
+                    obj = obj[p]
+                }
+            })
+        },
         getNestedPathValue: function (item, path) {
             const parts = path.split('.')
             let val = item
             parts.forEach((p) => {
-                if (val) {
-                    val = val[p]
+                if (p.length > 0) {
+                    if (val) {
+                        val = val[p]
+                    }
                 }
             })
             return val
+        },
+        isSetNested: function (obj, path) {
+            const parts = path.split('.')
+            let isSet = false
+            parts.forEach((p, indexer) => {
+                if (indexer === parts.length - 1) {
+                    if (obj && obj[p]) {
+                        isSet = true
+                    }
+                } else {
+                    obj = obj[p]
+                }
+            })
+            return isSet
         },
         flattenObject: function (obj, depth = -1) {
             const out = {}

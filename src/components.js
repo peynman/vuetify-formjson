@@ -16,16 +16,23 @@ import VFObjectsListInput from './Fields/ObjectsListInput.vue'
 import VFRadioGroupInput from './Fields/RadioGroupInput.vue'
 import VFBitwiseFlagsInput from './Fields/BitwiseFlagsInput.vue'
 import VFImageUploadInput from './Fields/ImageUploadInput.vue'
-import VFDatatableInput from './Fields/DatatableInput.vue'
+import VFDatatableInput from './Fields/DataTableInput.vue'
 import VFButtonInput from './Fields/ButtonInput.vue'
 import VFBlocklyInput from './Fields/Blockly/Blockly.vue'
 import VFButtonsListInput from './Fields/ButtonsListInput.vue'
 import VFMarkdownInput from './Fields/MarkdownInput/MarkdownInput.vue'
+import VFCodeInput from './Fields/CodeInput.vue'
+import VFCalendarInput from './Fields/CalendarInput.vue'
+import VFDatetimeInput from './Fields/DateTimeInput.vue'
+import VFMultiUploadInput from './Fields/MultiUploadInput.vue'
 
 import VFGroupSingleExpansion from './Fields/GroupSingleExpansion.vue'
 import VFGroupExpansion from './Fields/GroupExpansion.vue'
 import VFGroupTabs from './Fields/GroupTabs.vue'
 import VFGroupTreeview from './Fields/GroupTreeview.vue'
+import FormJSONSchemaRenderer from './Fields/FormJSONBuilder/generator'
+
+import VFParagraph from './Fields/Paragraph.vue'
 
 export const customComponents = {
     [VuetifyFormJSON.name]: VuetifyFormJSON,
@@ -49,12 +56,18 @@ export const customComponents = {
     [VFButtonsListInput.name]: VFButtonsListInput,
     [VFBlocklyInput.name]: VFBlocklyInput,
     [VFMarkdownInput.name]: VFMarkdownInput,
+    [VFCodeInput.name]: VFCodeInput,
+    [VFMultiUploadInput.name]: VFMultiUploadInput,
+    [VFDatetimeInput.name]: VFDatetimeInput,
+    [VFCalendarInput.name]: VFCalendarInput,
 
     [VFGroupExpansion.name]: VFGroupExpansion,
     [VFGroupSingleExpansion.name]: VFGroupSingleExpansion,
     [VFGroupTabs.name]: VFGroupTabs,
     [VFGroupTreeview.name]: VFGroupTreeview,
-    [VFFormBuilder.name]: VFFormBuilder
+    [VFFormBuilder.name]: VFFormBuilder,
+
+    [VFParagraph.name]: VFParagraph
 }
 
 const FormBuilderInputsList = []
@@ -113,6 +126,8 @@ export default {
     VFBlocklyInput,
     VFButtonsListInput,
     VFMarkdownInput,
+    FormJSONSchemaRenderer,
+    VFCodeInput,
 
     VFGroupSingleExpansion,
     VFGroupExpansion,

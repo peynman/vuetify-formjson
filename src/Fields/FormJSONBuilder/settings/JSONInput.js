@@ -5,6 +5,10 @@ import {
 } from './comon'
 
 export default class JSONInputSettings extends BaseInputSettings {
+    getInputSlots () {
+        return []
+    }
+
     getInputEventGroupsList () {
         return [
             {

@@ -29,7 +29,10 @@ const globals = {
     vuetifyMarkdownEditor: 'Editor',
     'markdown-it': 'markdownit',
     mathlive: 'MathLive',
-    mermaid: 'mermaid'
+    'dist/mathlive.mjs': 'MathLive',
+    mermaid: 'mermaid',
+    moment: 'moment',
+    'moment-timezone': 'moment-timezone'
 }
 const outputs = [{
     name: 'VuetifyFormJSON',
@@ -66,14 +69,18 @@ export default [{
         'blockly',
         'markdown-it',
         'mermaid',
-        'mathlive'
+        'mathlive',
+        'moment',
+        'moment-timezone'
     ],
     input: 'src/index.js',
     output: outputs,
     plugins: [
         eslint({
             exclude: [
-                'sass/**'
+                'sass/**',
+                'src/Fields/MarkdownInput/AceEditor/**',
+                'src/Fields/MarkdownInput/MarkdownItColor/**'
             ]
         }),
         replace({

@@ -16,6 +16,10 @@ import BitwiseFlagsInputSettings from './settings/BitwiseFlagsInput'
 import ImageUploadInputSettings from './settings/ImageUploadInput'
 import DatatableInputSettings from './settings/DatatableInput'
 import ButtonInput from './settings/ButtonInput'
+import DateTimeInputSettings from './settings/DateTimeInput'
+import CalednarInputSettings from './settings/CalendarInput'
+import MarkdownInputSettings from './settings/MarkdownInput'
+import ParagraphInputSettings from './settings/ParagraphInput'
 
 import GroupSingleExpansionSettings from './settings/GroupSingleExpansion'
 import GroupExpansionSettings from './settings/GroupExpansion'
@@ -48,6 +52,10 @@ export default {
                 'vf-group-treeview': new GroupTreeviewSettings(),
                 'vf-button-input': new ButtonInput(),
                 'vf-image-upload-input': new ImageUploadInputSettings(),
+                'vf-datetime-input': new DateTimeInputSettings(),
+                'vf-calendar-input': new CalednarInputSettings(),
+                'vf-paragraph-input': new ParagraphInputSettings(),
+                'vf-markdown-input': new MarkdownInputSettings(),
                 group: new GroupSettings(),
                 ...this.settings
             }
@@ -93,6 +101,20 @@ export default {
             }
             if (fields.getSettingsFormFields) {
                 form.fields = fields.getSettingsFormFields()
+            }
+            if (item.parent && this.inputTypeSettings[item.parent.model.type] && this.inputTypeSettings[item.parent.model.type].getInputSlots) {
+                const slots = this.inputTypeSettings[item.parent.model.type].getInputSlots()
+                if (slots.length > 0) {
+                    form.fields = {
+                        slots: {
+                            type: 'input',
+                            input: 'select',
+                            label: 'Slot',
+                            objects: slots
+                        },
+                        ...form.fields
+                    }
+                }
             }
 
             return form
@@ -288,6 +310,7 @@ export default {
             const formjson = {}
             const iterateAndEvaluateItems = (items, ref) => {
                 items.forEach(item => {
+                    // create child from item type
                     let appendChildrenProperty = ''
                     if (item.model.type) {
                         if (item.model.type.endsWith('input')) {
@@ -295,9 +318,6 @@ export default {
                             ref[item.model.id] = {
                                 type: 'input',
                                 input: idSlices.slice(1, idSlices.length - 1).join('-'),
-                                ...(item.value && item.value.settings
-                                    ? item.value.settings
-                                    : {})
                             }
                         } else if (item.model.type.startsWith('vf-group-')) {
                             appendChildrenProperty = 'groups'
@@ -305,17 +325,11 @@ export default {
                             ref[item.model.id] = {
                                 type: 'group',
                                 group: idSlices.slice(2).join('-'),
-                                ...(item.value && item.value.settings
-                                    ? item.value.settings
-                                    : {}),
                                 [appendChildrenProperty]: {}
                             }
                         } else if (item.model.type === 'group') {
                             appendChildrenProperty = 'fields'
                             ref[item.model.id] = {
-                                ...(item.value && item.value.settings
-                                    ? item.value.settings
-                                    : {}),
                                 [appendChildrenProperty]: {}
                             }
                         }
@@ -323,19 +337,19 @@ export default {
                     if (!ref[item.model.id]) {
                         appendChildrenProperty = 'fields'
                         ref[item.model.id] = {
-                            ...(item.value && item.value.settings ? item.value.settings : {}),
                             [appendChildrenProperty]: {}
                         }
                     }
 
-                    if (this.inputTypeSettings[item.model.type] && this.inputTypeSettings[item.model.type].getInputPropsFromFromSettings) {
+                    // append child props from settings
+                    if (this.inputTypeSettings[item.model.type] && this.inputTypeSettings[item.model.type].getInputPropsFromSettings) {
                         ref[item.model.id] = {
                             ...ref[item.model.id],
-                            ...this.inputTypeSettings[item.model.type].getInputPropsFromFromSettings((item.value && item.value.settings ? item.value.settings : {})),
-                            tabs: null
+                            ...this.inputTypeSettings[item.model.type].getInputPropsFromSettings((item.value && item.value.settings ? item.value.settings : {}))
                         }
                     }
 
+                    // iterate on children of child
                     if (item.children) {
                         iterateAndEvaluateItems(
                             item.children,
@@ -386,44 +400,41 @@ export default {
                     })
 
                     const settingsVals = {}
+                    const eventsVals = {}
                     const notDataKeys = [
                         'fields',
                         'groups',
                         'group',
                         'type',
                         'input',
-                        'component'
+                        'component',
+                        'v-on'
                     ]
+
                     for (const inner in data[prop]) {
                         if (notDataKeys.indexOf(inner) < 0) {
-                            settingsVals[inner] = data[prop][inner]
-                        }
-                    }
-
-                    const eventsVals = {}
-                    const findEvents = (item, parent) => {
-                        for (const prop in item) {
-                            if (prop === 'v-on') {
-                                let eventPropertyName = 'events'
-                                if (parent !== 'props') {
-                                    eventPropertyName = prop.substr(0, 'Props'.length) + 'Events'
+                            settingsVals[inner] = {}
+                            if (typeof data[prop][inner] === 'object') {
+                                for (const nested in data[prop][inner]) {
+                                    if (nested !== 'v-on') {
+                                        settingsVals[inner][nested] = data[prop][inner][nested]
+                                    } else {
+                                        if (!eventsVals[inner]) {
+                                            eventsVals[inner] = []
+                                        }
+                                        for (const event in data[prop][inner][nested]) {
+                                            eventsVals[inner].push({
+                                                event: event,
+                                                function: data[prop][inner][nested][event]
+                                            })
+                                        }
+                                    }
                                 }
-                                if (!eventsVals[eventPropertyName]) {
-                                    eventsVals[eventPropertyName] = []
-                                }
-                                for (const event in item[prop]) {
-                                    // console.log('events', prop, item[prop])
-                                    eventsVals[eventPropertyName].push({
-                                        event: event,
-                                        function: item[prop][event]
-                                    })
-                                }
-                            } else if (typeof item[prop] === 'object') {
-                                findEvents(item[prop], prop)
+                            } else {
+                                settingsVals[inner] = data[prop][inner]
                             }
                         }
                     }
-                    findEvents(settingsVals, 'props')
                     newModel.value = {
                         settings: {
                             tabs: {
@@ -462,11 +473,17 @@ export default {
                     case 'prepend':
                         if (item.model.type === 'vf-fields-renderer') {
                             actions.add = this.getAddAction(this.schema.builder, item)
-                        } else {
+                        }
+                        if (!item.isRoot()) {
                             actions.remove = this.getRemoveAction(
                                 this.schema.builder,
                                 item
                             )
+                        }
+                        if (this.inputTypeSettings[item.model.type] && this.inputTypeSettings[item.model.type].getInputSlots) {
+                            if (this.inputTypeSettings[item.model.type].getInputSlots().length > 0) {
+                                actions.add = this.getAddAction(this.schema.builder, item)
+                            }
                         }
                         if (item.model.type.startsWith('group')) {
                             actions.add = this.getAddAction(this.schema.builder, item)

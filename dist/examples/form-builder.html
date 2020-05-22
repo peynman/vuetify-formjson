@@ -26,38 +26,14 @@
 		<v-app>
 			<v-content>
                 <v-row class="fill-height ma-0">
-                    <v-col class="showcase-column" md="7">
-                        <v-tabs grow centered>
-                            <v-tab href="#form">
-                            Form
-                            </v-tab>
-                            <v-tab-item value="form">
-                                <vuetify-formjson v-bind="formJSONCompiledModel"></vuetify-formjson>
-                            </v-tab-item>
-
-                            <v-tab href="#formSchemaModel">
-                            Form Schema
-                            </v-tab>
-                            <v-tab-item value="formSchemaModel">
-                            <code class="d-block">{{JSON.stringify(formSchemaModel, null, 2) }}</code>
-                            </v-tab-item>
-
-                            <v-tab href="#formSchemaInternalItems">
-                            Form Builder Items
-                            </v-tab>
-                            <v-tab-item value="formSchemaInternalItems">
-                            <code class="d-block">{{JSON.stringify(formSchemaInternalItems, (k, v) => (k !== 'parent' ? v : undefined), 2) }}</code>
-                            </v-tab-item>
-                        </v-tabs>
-                    </v-col>
-                    <v-col md="5">
+                    <v-col md="12">
                         <vf-formjson-input ref="jsonEditor" :field="formJSONBuilderFieldDefinition" :schema.sync="formSchemaInternalItems" v-model="formSchemaModel"></vf-formjson-input>
                     </v-col>
                 </v-row>
 			</v-content>
 		</v-app>
 	</div>
-	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsoneditor@8.6.4/dist/jsoneditor.min.js"></script>
 	<script src="https://unpkg.com/@seregpie/claw@3.0.0"></script>
@@ -69,48 +45,29 @@
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@10.0.0/dist/markdown-it.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@8.5.0/dist/mermaid.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mathlive@0.50.7/dist/mathlive.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.26.0/min/moment-with-locales.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment-timezone@0.5.31/builds/moment-timezone-with-data.min.js"></script>
 	<script src="../vuetify-formjson.min.js"></script>
 	<script>
         const AvailableInputTypes = VuetifyFormJSON.default.Components.FormBuilderInputsList
+        const FormJSONRenderer = VuetifyFormJSON.default.Components.FormJSONSchemaRenderer
 
 		var app = new Vue({
+            mixins: [FormJSONRenderer],
 			el: '#app',
 			vuetify: new Vuetify(),
             computed: {
             },
             data() {
                 return {
-                    inputs: AvailableInputTypes,
                     formSchemaModel: {},
                     formSchemaInternalItems: {},
-                    formJSONCompiledModel: {},
                     formJSONBuilderFieldDefinition: {
                         label: 'Create Form Schema',
                         inputs: AvailableInputTypes
                     }
                 }
             },
-            watch: {
-                formSchemaModel: {
-                    deep: true,
-                    handler () {
-                        try {
-                            const compiledForm = this.$refs.jsonEditor.CompileFormJSONSchemaWithCode(
-                                this,
-                                this.formSchemaModel,
-                                {}
-                            )
-                            this.formJSONCompiledModel = {
-                                fields: compiledForm.formjson.fields,
-                                id: 'exampleFormOutput',
-                                options: compiledForm.formjson.options
-                            }
-                        } catch (e) {
-
-                        }
-                    }
-                }
-            }
 		})
 	</script>
 </body>
