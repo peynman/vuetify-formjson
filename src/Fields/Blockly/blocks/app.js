@@ -132,6 +132,24 @@ export default function (Blockly) {
         return ['this.previewValues', Blockly.JavaScript.ORDER_ASSIGNMENT]
     }
 
+    // get api response alert props
+    Blockly.Blocks.app_form_response_alert = {
+        init: function () {
+            this.appendDummyInput()
+                .appendField('get response ')
+                .appendField(new Blockly.FieldVariable('item'), 'var_name')
+                .appendField('alert')
+            this.setOutput(true, 'Object')
+            this.setColour(110)
+            this.setTooltip('')
+            this.setHelpUrl('')
+        }
+    }
+    Blockly.JavaScript.app_form_response_alert = function (block) {
+        var variableName = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('var_name'), Blockly.Variables.NAME_TYPE)
+        return [`this.getAlertForResponse(this.blockly.${variableName})`, Blockly.JavaScript.ORDER_ASSIGNMENT]
+    }
+
     // get form value at path
     Blockly.Blocks.app_form_value_at_path = {
         init: function () {
@@ -166,7 +184,7 @@ export default function (Blockly) {
         return [`this.getNestedPathValue(this.previewProps, ${argument0})`, Blockly.JavaScript.ORDER_ASSIGNMENT]
     }
 
-    // get form schema at path
+    // set form schema at path
     Blockly.Blocks.app_set_form_schema_at_path = {
         init: function () {
             this.appendValueInput('PATH')
@@ -186,6 +204,28 @@ export default function (Blockly) {
         var argument0 = Blockly.JavaScript.valueToCode(block, 'PATH', Blockly.JavaScript.ORDER_ASSIGNMENT) || ''
         var argument1 = Blockly.JavaScript.valueToCode(block, 'VAL', Blockly.JavaScript.ORDER_ASSIGNMENT) || ''
         return `this.setNestedPathValue(this.previewProps, ${argument0}, ${argument1})\n`
+    }
+
+    // append to form schema at path
+    Blockly.Blocks.app_append_form_schema_at_path = {
+        init: function () {
+            this.appendValueInput('PATH')
+                .setCheck('String')
+                .appendField('merge to form schema at path')
+            this.appendValueInput('VAL')
+                .setCheck(['Array', 'String', 'Object', 'Number', 'Boolean'])
+                .appendField('with value')
+            this.setPreviousStatement(true, null)
+            this.setNextStatement(true, null)
+            this.setColour(110)
+            this.setTooltip('')
+            this.setHelpUrl('')
+        }
+    }
+    Blockly.JavaScript.app_append_form_schema_at_path = function (block) {
+        var argument0 = Blockly.JavaScript.valueToCode(block, 'PATH', Blockly.JavaScript.ORDER_ASSIGNMENT) || ''
+        var argument1 = Blockly.JavaScript.valueToCode(block, 'VAL', Blockly.JavaScript.ORDER_ASSIGNMENT) || ''
+        return `this.appendNestedPathValue(this.previewProps, ${argument0}, ${argument1})\n`
     }
 
     // app console log
@@ -212,9 +252,11 @@ export const CategoryApp =
 <category id="catApp" colour="110" name="App">
     <block type="app_get_from_state"></block>
     <block type="app_form_value_at_path"></block>
+    <block type="app_form_response_alert"></block>
     <block type="app_form_values"></block>
     <block type="app_form_schema_at_path"></block>
     <block type="app_set_form_schema_at_path"></block>
+    <block type="app_append_form_schema_at_path"></block>
     <block type="app_change_state"></block>
     <block type="app_commit_mutation"></block>
     <block type="app_go_to_page"></block>

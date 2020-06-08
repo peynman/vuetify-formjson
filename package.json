@@ -24,6 +24,9 @@
     "browser": {
         "./components": "src/components.js"
     },
+    "publishConfig": {
+      "access": "public"
+    },
     "scripts": {
         "build": "./node_modules/rollup/dist/bin/rollup --config rollup.config.js",
         "build:prod": "./node_modules/rollup/dist/bin/rollup --config rollup.config.js --config-production",
@@ -82,6 +85,7 @@
         "vue": "^2.6.11",
         "vue-axios": "^2.1.5",
         "vuetify": "^2.2.27",
-        "vuetify-image-input": "^19.1.0"
+        "vuetify-image-input": "^19.1.0",
+        "vuetify-loader": "^1.4.3"
     }
 }

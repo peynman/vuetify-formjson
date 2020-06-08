@@ -21,8 +21,12 @@
 
 <script>
 import BaseComponent, { DecoratableComponent } from './mixins'
+import { VSelect } from 'vuetify/lib'
 
 export default {
+    components: {
+        VSelect
+    },
     mixins: [BaseComponent, DecoratableComponent],
     name: 'vf-select-input',
     props: {

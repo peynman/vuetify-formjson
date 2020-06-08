@@ -9,6 +9,20 @@ export default {
         webRequest (data) {
             return this.axios(data)
         },
+        getAlertForResponse (response) {
+            let data = response
+            if (response.data) {
+                data = response.data
+            }
+            return {
+                message: data.message,
+                validations: data.validations,
+                props: {
+                    color: data.validations ? 'warning' : response.status === 200 ? 'success' : 'red',
+                    type: data.validations ? 'warning' : response.status === 200 ? 'success' : 'error'
+                }
+            }
+        },
         getStateFromNestedPath (path) {
             console.log(path)
             const parts = path.split('.')

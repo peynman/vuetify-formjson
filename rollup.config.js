@@ -28,8 +28,7 @@ const globals = {
     blockly: 'Blockly',
     vuetifyMarkdownEditor: 'Editor',
     'markdown-it': 'markdownit',
-    mathlive: 'MathLive',
-    'dist/mathlive.mjs': 'MathLive',
+    // 'dist/mathlive.mjs': 'MathLive',
     mermaid: 'mermaid',
     moment: 'moment',
     'moment-timezone': 'moment-timezone'
@@ -69,7 +68,7 @@ export default [{
         'blockly',
         'markdown-it',
         'mermaid',
-        'mathlive',
+        // 'mathlive',
         'moment',
         'moment-timezone'
     ],

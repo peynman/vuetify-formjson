@@ -4,7 +4,7 @@ export default {
             const tree = this.getFormSchemaFromFormJSON(data.schema)
             this.codeModel = data.code
             this.schema = { builder: tree }
-            this.previewValues = data.values
+            this[this.getFormValuePropName()] = data.values
         },
         onDownload () {
             this.startJSONDownload(
@@ -41,7 +41,7 @@ export default {
                             builder: [this.treeModel.parse(JSON.parse(JSON.stringify(tree)))]
                         }
                         this.codeModel = ''
-                        this.previewValues = {}
+                        this[this.getFormValuePropName()] = {}
                     }
                 })
         }

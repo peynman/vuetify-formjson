@@ -21,7 +21,11 @@
 
 <script>
 import BaseComponent from './mixins'
+import { VExpansionPanel, VExpansionPanels, VExpansionPanelContent, VExpansionPanelHeader } from 'vuetify/lib'
 export default {
+    components: {
+        VExpansionPanel, VExpansionPanels, VExpansionPanelContent, VExpansionPanelHeader
+    },
     mixins: [BaseComponent],
     name: 'vf-group-expansions',
     props: {

@@ -67,9 +67,16 @@
 <script>
 import BaseComponent, { DecoratableComponent, EasyNestedObject } from './mixins'
 import confirm from './../Confirm.vue'
+import { VContainer, VDialog, VTreeview, VNavigationDrawer, VSheet, VMenu } from 'vuetify/lib'
 
 export default {
     components: {
+        VContainer,
+        VDialog,
+        VTreeview,
+        VNavigationDrawer,
+        VSheet,
+        VMenu,
         confirm
     },
     mixins: [BaseComponent, EasyNestedObject, DecoratableComponent],

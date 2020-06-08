@@ -14,7 +14,11 @@
 
 <script>
 import BaseComponent from './mixins'
+import { VAutocomplete } from 'vuetify/lib'
 export default {
+    components: {
+        VAutocomplete
+    },
     mixins: [BaseComponent],
     name: 'vf-autocomplete-input',
     props: {

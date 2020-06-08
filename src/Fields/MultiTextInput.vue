@@ -33,8 +33,12 @@
 </template>
 <script>
 import BaseComponent from './mixins'
+import { VTooltip, VBtn, VIcon } from 'vuetify/lib'
 
 export default {
+    components: {
+        VTooltip, VBtn, VIcon
+    },
     mixins: [BaseComponent],
     name: 'vf-multitext-input',
     props: {

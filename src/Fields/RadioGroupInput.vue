@@ -26,8 +26,13 @@
 
 <script>
 import BaseComponent, { DecoratableComponent } from './mixins'
+import { VRadioGroup, VRadio } from 'vuetify/lib'
 
 export default {
+    components: {
+        VRadioGroup,
+        VRadio
+    },
     mixins: [BaseComponent, DecoratableComponent],
     name: 'vf-radio-group-input',
     props: {

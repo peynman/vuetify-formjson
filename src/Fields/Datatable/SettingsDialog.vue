@@ -19,7 +19,11 @@
 </template>
 
 <script>
+import { VDialog, VBtn, VIcon, VCard, VCardTitle } from 'vuetify/lib'
 export default {
+    components: {
+        VDialog, VBtn, VIcon, VCard, VCardTitle
+    },
     name: 'vf-datatable-dialog-settings',
     props: {
         value: {

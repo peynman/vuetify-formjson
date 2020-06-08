@@ -27,7 +27,11 @@
 </template>
 
 <script>
+import { VDialog, VBtn, VIcon, VCard, VCardTitle, VCardActions } from 'vuetify/lib'
 export default {
+    components: {
+        VDialog, VBtn, VIcon, VCard, VCardActions, VCardTitle
+    },
     name: 'vf-datatable-dialog-delete',
     props: {
         showDelete: Boolean,

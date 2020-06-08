@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import MathLive from 'dist/mathlive.mjs'
+// import MathLive from 'dist/mathlive.mjs'
 import BaseComponent from './../mixins'
 import ACE from './AceEditor/ace'
 import './AceEditor/mode-markdown'
@@ -58,13 +58,14 @@ import './AceEditor/theme-eclipse'
 import markdownit from 'markdown-it'
 import MarkdownItColor from './MarkdownItColor/index'
 import MermaidPlugin from './mermaid'
-import MathLivePlugin from './mathlive'
+// import MathLivePlugin from './mathlive'
 import FromJSONPlugin from './formjson'
-
+import { VCard, VCardTitle, VBtn, VIcon, VCardText, VSpacer, VToolbar, VToolbarTitle } from 'vuetify/lib'
 export default {
-    mixins: [BaseComponent],
     components: {
+        VCard, VCardTitle, VBtn, VIcon, VCardText, VSpacer, VToolbar, VToolbarTitle
     },
+    mixins: [BaseComponent],
     name: 'vf-markdown-input',
     props: {
         id: String,
@@ -120,15 +121,15 @@ export default {
                 this.updateMarkdownText()
                 this.$emit('input', this.devalue)
             }
-        },
-        dialog () {
-            if (this.dialog && !this.mathfieldEditor) {
-                if (this.$refs.editorMath) {
-                    this.mathfieldEditor = MathLive.makeMathField(this.$refs.editorMath, {
-                    })
-                }
-            }
         }
+        // dialog () {
+        //     if (this.dialog && !this.mathfieldEditor) {
+        //         if (this.$refs.editorMath) {
+        //             this.mathfieldEditor = MathLive.makeMathField(this.$refs.editorMath, {
+        //             })
+        //         }
+        //     }
+        // }
     },
     mounted () {
         this.aceEditor = ACE.edit(this.$refs.editorCode, {
@@ -151,9 +152,9 @@ export default {
         this.markdownEditor.use(MermaidPlugin, {
             host: this
         })
-        this.markdownEditor.use(MathLivePlugin, {
-            host: this
-        })
+        // this.markdownEditor.use(MathLivePlugin, {
+        //     host: this
+        // })
         this.markdownEditor.use(FromJSONPlugin, {
             host: this
         })

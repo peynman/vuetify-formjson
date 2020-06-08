@@ -14,8 +14,12 @@
 
 <script>
 import BaseComponent from './mixins'
+import { VSlider } from 'vuetify/lib'
 
 export default {
+    components: {
+        VSlider
+    },
     mixins: [BaseComponent],
     name: 'vf-range-input',
     props: {

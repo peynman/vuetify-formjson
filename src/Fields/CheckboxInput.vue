@@ -12,7 +12,11 @@
 
 <script>
 import BaseComponent from './mixins'
+import { VCheckbox } from 'vuetify/lib'
 export default {
+    components: {
+        VCheckbox
+    },
     mixins: [BaseComponent],
     name: 'vf-checkbox-input',
     props: {

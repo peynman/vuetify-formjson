@@ -222,6 +222,12 @@ export const CommonInputEssentials = {
         input: 'text',
         label: 'Class',
         class: 'col-12 ma-0 ps-0 pe-0'
+    },
+    hidden: {
+        type: 'input',
+        input: 'checkbox',
+        label: 'Hidden',
+        class: 'col-12 ma-0 ps-0 pe-0'
     }
 }
 

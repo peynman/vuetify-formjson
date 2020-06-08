@@ -1,40 +1,49 @@
 <template>
-  <component :class="`${options && options.formClass ? options.formClass : ''}`" :is="getRootComponent()" v-bind="getRootComponentProps()">
-    <component
-        v-if="options && options.wrap && options.wrap.enabled !== false"
-        :is="options.wrap.component"
-        v-bind="options.wrap.props"
-        :class="options.wrap.class"
+  <component
+    :class="`${options && options.formClass ? options.formClass : ''}`"
+    :is="getRootComponent()"
+    v-bind="getRootComponentProps()"
     >
+    <component
+      v-if="options && options.wrap && options.wrap.enabled !== false"
+      :is="options.wrap.component"
+      v-bind="options.wrap.props"
+      :class="options.wrap.class"
+    >
+      <component
+        :is="options.wrap.inside.component"
+        :class="options.wrap.inside.class"
+        v-for="(field, key) in visibleFields"
+        :key="`${id}-properties-${key}`"
+        v-bind="options.wrap.inside.props"
+      >
         <component
-            :is="options.wrap.inside.component"
-            :class="options.wrap.inside.class"
-            v-for="(field, key) in fields"
-            :key="`${id}-properties-${key}`"
-            v-bind="options.wrap.inside.props"
-        >
-            <component
-                :ref="key"
-                :is="getComponentForField(field)"
-                v-model="devalue[key]"
-                v-bind="getComponentPropsForField(field)"
-            ></component>
-        </component>
+          :ref="key"
+          :is="getComponentForField(field)"
+          v-model="devalue[key]"
+          v-bind="getComponentPropsForField(field)"
+        ></component>
+      </component>
     </component>
     <component
-        v-else
-        :ref="key"
-        v-for="(field, key) in fields"
-        :key="`${id}-properties-${key}`"
-        :is="getComponentForField(field)"
-        v-model="devalue[key]"
-        v-bind="getComponentPropsForField(field)"
+      v-else
+      :ref="key"
+      v-for="(field, key) in visibleFields"
+      :key="`${id}-properties-${key}`"
+      :is="getComponentForField(field)"
+      v-model="devalue[key]"
+      v-bind="getComponentPropsForField(field)"
     ></component>
   </component>
 </template>
 
 <script>
+import { VRow, VCol, VCard, VCardActions, VCardText, VCardTitle, VList, VListItem, VListItemTitle, VListItemTitleContent } from 'vuetify/lib'
+
 export default {
+    components: {
+        VRow, VCol, VCard, VCardActions, VCardText, VCardTitle, VList, VListItem, VListItemTitle, VListItemTitleContent
+    },
     name: 'vf-fields-renderer',
     props: {
         id: String,
@@ -51,6 +60,20 @@ export default {
             devalue: this.value
         }
     },
+    computed: {
+        visibleFields () {
+            const filter = function (obj, predicate) {
+                const result = {}; let key
+                for (key in obj) {
+                    if (obj[key] && !predicate(obj[key])) {
+                        result[key] = obj[key]
+                    }
+                }
+                return result
+            }
+            return filter(this.fields, (i) => i.hidden === true)
+        }
+    },
     watch: {
         devalue: {
             deep: true,
@@ -58,7 +81,11 @@ export default {
                 if (this.onUpdated) {
                     this.onUpdated(this.devalue)
                 }
-                if (this.options && this.options['v-on'] && this.options['v-on'].input) {
+                if (
+                    this.options &&
+          this.options['v-on'] &&
+          this.options['v-on'].input
+                ) {
                     this.options['v-on'].input(this.devalue)
                 }
                 this.$emit('input', this.devalue)
@@ -75,11 +102,13 @@ export default {
         getRootComponent () {
             if (this.options) {
                 switch (this.options.type) {
-                case 'col': return 'v-col'
-                case 'component': return this.options.component
+                case 'col':
+                    return VCol
+                case 'component':
+                    return this.options.component
                 }
             }
-            return 'v-row'
+            return VRow
         },
         getRootComponentProps () {
             if (this.options) {
@@ -88,6 +117,9 @@ export default {
                 }
             }
             return {}
+        },
+        isVisibleField (field) {
+            return field.visible !== false
         },
         getComponentPropsForField (field, key) {
             if (!field.type || field.type === 'row' || field.type === 'col') {
@@ -107,7 +139,9 @@ export default {
             }
             if (this.options) {
                 if (this.options.class) {
-                    props.field.class = this.options.class + (props.field.class ? ' ' + props.field.class : '')
+                    props.field.class =
+            this.options.class +
+            (props.field.class ? ' ' + props.field.class : '')
                 }
                 if (this.options.props) {
                     props.field.props = {

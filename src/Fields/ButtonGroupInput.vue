@@ -23,7 +23,11 @@
 
 <script>
 import BaseComponent from './mixins'
+import { VBtn, VIcon, VTooltip, VBtnToggle } from 'vuetify/lib'
 export default {
+    components: {
+        VIcon, VTooltip, VBtnToggle, VBtn
+    },
     mixins: [BaseComponent],
     name: 'vf-select-button-input',
     props: {

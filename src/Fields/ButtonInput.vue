@@ -12,7 +12,11 @@
 
 <script>
 import BaseComponent from './mixins'
+import { VBtn, VIcon } from 'vuetify/lib'
 export default {
+    components: {
+        VBtn, VIcon
+    },
     mixins: [BaseComponent],
     name: 'vf-button-input',
     props: {

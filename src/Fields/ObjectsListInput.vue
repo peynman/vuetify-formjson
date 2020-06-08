@@ -24,8 +24,12 @@
 
 <script>
 import BaseComponent, { DecoratableComponent } from './mixins'
+import { VCheckbox } from 'vuetify/lib'
 
 export default {
+    components: {
+        VCheckbox
+    },
     mixins: [BaseComponent, DecoratableComponent],
     name: 'vf-objects-list-input',
     props: {

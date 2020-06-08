@@ -11,8 +11,11 @@
 <script>
 import BaseComponent from './mixins'
 import ACE from './MarkdownInput/AceEditor/ace'
-
+import { VCard } from 'vuetify/lib'
 export default {
+    components: {
+        VCard
+    },
     mixins: [BaseComponent],
     name: 'vf-code-input',
     props: {

@@ -25,6 +25,7 @@ import VFCodeInput from './Fields/CodeInput.vue'
 import VFCalendarInput from './Fields/CalendarInput.vue'
 import VFDatetimeInput from './Fields/DateTimeInput.vue'
 import VFMultiUploadInput from './Fields/MultiUploadInput.vue'
+import VFAlertInput from './Fields/AlertInput.vue'
 
 import VFGroupSingleExpansion from './Fields/GroupSingleExpansion.vue'
 import VFGroupExpansion from './Fields/GroupExpansion.vue'
@@ -60,6 +61,7 @@ export const customComponents = {
     [VFMultiUploadInput.name]: VFMultiUploadInput,
     [VFDatetimeInput.name]: VFDatetimeInput,
     [VFCalendarInput.name]: VFCalendarInput,
+    [VFAlertInput.name]: VFAlertInput,
 
     [VFGroupExpansion.name]: VFGroupExpansion,
     [VFGroupSingleExpansion.name]: VFGroupSingleExpansion,
@@ -106,10 +108,11 @@ export default {
         }
 
         register(Vue, customComponents)
+        Vue.config.performance = true
     },
 
-    VFTextInput,
     VuetifyFormJSON,
+    VFTextInput,
     VFColorInput,
     VFButtonGroupInput,
     VFSelectInput,
@@ -128,6 +131,10 @@ export default {
     VFMarkdownInput,
     FormJSONSchemaRenderer,
     VFCodeInput,
+    VFMultiUploadInput,
+    VFDatetimeInput,
+    VFCalendarInput,
+    VFAlertInput,
 
     VFGroupSingleExpansion,
     VFGroupExpansion,

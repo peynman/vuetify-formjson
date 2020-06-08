@@ -42,8 +42,12 @@
 <script>
 import JSONEditor from 'jsoneditor'
 import BaseComponent from './mixins'
+import { VDivider, VBtn, VIcon } from 'vuetify/lib'
 
 export default {
+    components: {
+        VDivider, VBtn, VIcon
+    },
     mixins: [BaseComponent],
     name: 'vf-json-input',
     props: {

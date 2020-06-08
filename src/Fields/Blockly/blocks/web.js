@@ -43,13 +43,17 @@ export default function (Blockly) {
     Blockly.JavaScript.web_request = function (block) {
         const valueUrl = Blockly.JavaScript.valueToCode(block, 'url', Blockly.JavaScript.ORDER_ATOMIC)
         const dropdownMethod = block.getFieldValue('method')
-        // const dropdownContentType = block.getFieldValue('content_type')
+        const dropdownContentType = block.getFieldValue('content_type')
         const valueData = Blockly.JavaScript.valueToCode(block, 'data', Blockly.JavaScript.ORDER_ATOMIC)
-        // const valueHeaders = Blockly.JavaScript.valueToCode(block, 'headers', Blockly.JavaScript.ORDER_ATOMIC)
+        const valueHeaders = Blockly.JavaScript.valueToCode(block, 'headers', Blockly.JavaScript.ORDER_ATOMIC)
         const variableResponse = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('response'), Blockly.Variables.NAME_TYPE)
         const innerCode = Blockly.JavaScript.statementToCode(block, 'onResponse')
-        // TODO: Assemble JavaScript into code variable.
-        var code = `this.webRequest({\nurl: ${valueUrl},\nmethod: '${dropdownMethod}',\nheaders: {},\ndata: ${valueData},\n}).then((response) => {\n  this.blockly.${variableResponse} = response;\n ${innerCode}\n}).catch((err) => {\n this.blockly.${variableResponse} = err;\n ${innerCode}\n});`
+
+        let headersCode = `let headers = { 'Content-Type': '${dropdownContentType}' }\n`
+        if (valueHeaders !== '') {
+            headersCode = `let headers = ${valueHeaders}\nif (!headers) { headers = {}}\nheaders['Content-Type'] = '${dropdownContentType}'\n`
+        }
+        var code = `${headersCode}this.webRequest({\nvalidateStatus: (status) => (true),\nurl: ${valueUrl},\nmethod: '${dropdownMethod}',\nheaders,\ndata: ${valueData},\n}).then((response) => {\n  this.blockly.${variableResponse} = response;\n ${innerCode}\n})\n`
         return code
     }
 
@@ -78,9 +82,9 @@ export default function (Blockly) {
     Blockly.Blocks.web_is_response_ok = {
         init: function () {
             this.appendDummyInput()
-                .appendField('Is response in variable')
+                .appendField('Is response ')
                 .appendField(new Blockly.FieldVariable('item'), 'var_name')
-                .appendField(' OK')
+                .appendField(new Blockly.FieldDropdown([['OK', 'ok'], ['Validation Error', 'validation'], ['Error', 'error'], ['App Error', 'app'], ['Server Error', 'sever'], ['Other Errors', 'other']]), 'type')
             this.setInputsInline(true)
             this.setOutput(true, null)
             this.setColour(315)
@@ -90,7 +94,28 @@ export default function (Blockly) {
     }
     Blockly.JavaScript.web_is_response_ok = function (block) {
         var variableName = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('var_name'), Blockly.Variables.NAME_TYPE)
-        var code = 'this.blockly.' + variableName + '.status === 200'
+        const dropdownContentType = block.getFieldValue('content_type')
+        var code = ''
+        switch (dropdownContentType) {
+        case 'ok':
+            code += 'this.blockly.' + variableName + '.status === 200'
+            break
+        case 'validation':
+            code += `this.blockly.${variableName}.status === 400`
+            break
+        case 'error':
+            code += `this.blockly.${variableName}.status !== 200`
+            break
+        case 'app':
+            code += `this.blockly.${variableName}.status === 500`
+            break
+        case 'other':
+            code += `((this.blockly.${variableName}.status !== 503 || this.blockly.${variableName}.status !== 504) && ` +
+                        `(this.blockly.${variableName}.status !== 500) && ` +
+                        `(this.blockly.${variableName}.status !== 400) && ` +
+                        `(this.blockly.${variableName}.status === 200))`
+            break
+        }
         return [code, Blockly.JavaScript.ORDER_NONE]
     }
 }

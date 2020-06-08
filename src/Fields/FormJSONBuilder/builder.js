@@ -20,6 +20,7 @@ import DateTimeInputSettings from './settings/DateTimeInput'
 import CalednarInputSettings from './settings/CalendarInput'
 import MarkdownInputSettings from './settings/MarkdownInput'
 import ParagraphInputSettings from './settings/ParagraphInput'
+import AlertInputSettings from './settings/AlertInput'
 
 import GroupSingleExpansionSettings from './settings/GroupSingleExpansion'
 import GroupExpansionSettings from './settings/GroupExpansion'
@@ -56,6 +57,7 @@ export default {
                 'vf-calendar-input': new CalednarInputSettings(),
                 'vf-paragraph-input': new ParagraphInputSettings(),
                 'vf-markdown-input': new MarkdownInputSettings(),
+                'vf-alert-input': new AlertInputSettings(),
                 group: new GroupSettings(),
                 ...this.settings
             }
@@ -317,7 +319,7 @@ export default {
                             const idSlices = item.model.type.split('-')
                             ref[item.model.id] = {
                                 type: 'input',
-                                input: idSlices.slice(1, idSlices.length - 1).join('-'),
+                                input: idSlices.slice(1, idSlices.length - 1).join('-')
                             }
                         } else if (item.model.type.startsWith('vf-group-')) {
                             appendChildrenProperty = 'groups'

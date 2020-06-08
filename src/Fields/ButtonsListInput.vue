@@ -16,7 +16,11 @@
 
 <script>
 import BaseComponent, { DecoratableComponent } from './mixins'
+import { VBtn, VIcon } from 'vuetify/lib'
 export default {
+    components: {
+        VBtn, VIcon
+    },
     mixins: [BaseComponent, DecoratableComponent],
     name: 'vf-buttons-list-input',
     props: {

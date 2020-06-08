@@ -13,8 +13,12 @@
 
 <script>
 import BaseComponent from './mixins'
+import { VSwitch } from 'vuetify/lib'
 
 export default {
+    components: {
+        VSwitch
+    },
     mixins: [BaseComponent],
     name: 'vf-switch-input',
     props: {

@@ -90,10 +90,17 @@ import VFSettingsDialog from './Datatable/SettingsDialog.vue'
 import VFDeleteDialog from './Datatable/DeleteDialog.vue'
 import VFCreateDialog from './Datatable/CreateDialog.vue'
 import BaseComponent from './mixins'
-
+import { VDataTable, VBtn, VIcon, VSimpleCheckbox, VToolbar, VSpacer, VAlert } from 'vuetify/lib'
 export default {
     mixins: [BaseComponent],
     components: {
+        VDataTable,
+        VBtn,
+        VIcon,
+        VSimpleCheckbox,
+        VToolbar,
+        VSpacer,
+        VAlert,
         [VFSettingsDialog.name]: VFSettingsDialog,
         [VFDeleteDialog.name]: VFDeleteDialog,
         [VFCreateDialog.name]: VFCreateDialog

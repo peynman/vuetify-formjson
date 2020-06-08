@@ -49,7 +49,11 @@
 
 <script>
 import BaseComponent from './mixins'
+import { VTextField, VCard, VCardText, VColorPicker, VMenu } from 'vuetify/lib'
 export default {
+    components: {
+        VTextField, VCard, VCardText, VColorPicker, VMenu
+    },
     mixins: [BaseComponent],
     name: 'vf-color-input',
     props: {

@@ -36,10 +36,16 @@
 </template>
 
 <script>
+import BaseComponent from './mixins'
 import moment from 'moment'
 import 'moment-timezone'
+import { VTextField, VCard, VCardText, VMenu, VTimePicker, VDatePicker, VCardTitle } from 'vuetify/lib'
 
 export default {
+    components: {
+        VTextField, VCard, VCardText, VMenu, VTimePicker, VDatePicker, VCardTitle
+    },
+    mixins: [BaseComponent],
     name: 'vf-datetime-input',
     props: {
         id: String,
@@ -52,6 +58,15 @@ export default {
         },
         calendars () {
             return ['Gregorian', 'Shamsi', 'Ghamari']
+        },
+        calendarProps () {
+            return {}
+        },
+        timeProps () {
+            return {}
+        },
+        dateProps () {
+            return {}
         }
     },
     data () {
